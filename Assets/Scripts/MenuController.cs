@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -5,8 +6,9 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField] private GameObject settingspanel;
     [SerializeField] private GameObject quitpanel;
-     [SerializeField] private GameObject scorepanel;
+    [SerializeField] private GameObject MenuPanel;
      [SerializeField] private GameObject mappanel;
+    [SerializeField] private GameObject languagepanel;
    public void GameStart1()
     {
         SceneManager.LoadScene("GameScene2");
@@ -35,13 +37,10 @@ public class MenuController : MonoBehaviour
     {
         Application.Quit();
     }
-    public void ScoreOpen()
+    public void MenuOpenExit()
     {
-        scorepanel.SetActive(true);
-    }
-    public void ScoreExit()
-    {
-        scorepanel.SetActive(false);
+        bool isActive = MenuPanel.activeSelf;
+        MenuPanel.SetActive(!isActive);
     }
     public void MapOpen()
     {
@@ -50,6 +49,15 @@ public class MenuController : MonoBehaviour
     public void MapExit()
     {
         mappanel.SetActive(false);
+    }
+   
+    public void LanguageOpen()
+    {
+        languagepanel.SetActive(true);
+    }
+    public void LanguageExit()
+    {
+        languagepanel.SetActive(false);
     }
     
 

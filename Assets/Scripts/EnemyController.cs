@@ -7,7 +7,10 @@ public class EnemyController : MonoBehaviour
     public float damageAmount = 10f;
     [SerializeField] private float speed;
     [SerializeField] private float stoppingDistance;
-
+    [SerializeField] private GameObject diamondPrefab;
+    [Range(0f, 100f)]
+    [SerializeField] private float diamondDropChance = 100f;
+ 
     [SerializeField] private Score scoreManager;
 
     private Animator _animator;
@@ -36,6 +39,7 @@ public class EnemyController : MonoBehaviour
         {
             scoreManager.ScoreUpdate(10);
             Destroy(gameObject);
+            DropDiamond();
         }
     }
 
@@ -77,6 +81,14 @@ public class EnemyController : MonoBehaviour
         if (collision.tag == "Bullet")
         {
             health--;
+        }
+    }
+    private void DropDiamond()
+    {
+        float randomValue = Random.Range(0f, 100f);
+        if (randomValue <= diamondDropChance)
+        {
+            Instantiate(diamondPrefab, transform.position, Quaternion.identity);
         }
     }
 }

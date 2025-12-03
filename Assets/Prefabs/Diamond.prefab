@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4240371656349063687}
   - component: {fileID: 6013131514264700171}
   - component: {fileID: 2661856687470268346}
-  - component: {fileID: 7907845915911102351}
+  - component: {fileID: 6584675024547771732}
   m_Layer: 0
   m_Name: Diamond
   m_TagString: Diamond
@@ -157,8 +157,8 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!60 &7907845915911102351
-PolygonCollider2D:
+--- !u!61 &6584675024547771732
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -201,18 +201,5 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.041613847, y: 0.031019641}
-      - {x: 0.03830105, y: 0.04026466}
-      - {x: -0.03827961, y: 0.039355546}
-      - {x: -0.04016683, y: 0.031283922}
-      - {x: -0.0495854, y: 0.030240906}
-      - {x: -0.049504053, y: 0.0070544565}
-      - {x: -0.03914331, y: -0.008181635}
-      - {x: -0.008756552, y: -0.037448913}
-      - {x: 0.0103034, y: -0.03813539}
-      - {x: 0.029861316, y: -0.017448913}
-      - {x: 0.04953001, y: 0.001830603}
-      - {x: 0.050746027, y: 0.028181478}
-  m_UseDelaunayMesh: 0
+  m_Size: {x: 0.11, y: 0.09}
+  m_EdgeRadius: 0

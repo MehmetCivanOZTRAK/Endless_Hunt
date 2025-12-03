@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "EndlessHunt.slnx"
+    "dotnet.defaultSolution": "Endless_Hunt.slnx"
 }

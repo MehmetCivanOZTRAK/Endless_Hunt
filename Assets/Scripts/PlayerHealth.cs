@@ -14,7 +14,7 @@ public class PlayerHealth : MonoBehaviour
     private float _currentHealth;
     public HealthBar healthBar;
     
-    private readonly int DEATH_HASH = Animator.StringToHash("isDead");
+    private readonly int DEATH_HASH = Animator.StringToHash("Hurt");
 
     private void Start()
     {
@@ -50,6 +50,7 @@ public class PlayerHealth : MonoBehaviour
         //if (_isDead) return;
         _currentHealth -= damage;
         healthBar.SetHealth(_currentHealth);
+        _animator.SetTrigger("Hurt");
         if (_currentHealth <= 0)
         {
             Die();

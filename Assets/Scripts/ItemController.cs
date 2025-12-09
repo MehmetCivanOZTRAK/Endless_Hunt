@@ -13,10 +13,7 @@ public class ItemController : MonoBehaviour
             {
                 playerHealth.AddHealth(20);
             }
-            if (item.CompareTag("Diamond"))
-            {
-                FindAnyObjectByType<DiamondBar>().AddDiamonds(10);
-            }
+           
 
             Destroy(item);
         }

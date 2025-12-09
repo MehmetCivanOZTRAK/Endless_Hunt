@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7375374156368820776}
-  - component: {fileID: 4779266711067914848}
+  - component: {fileID: -734125825169592159}
   - component: {fileID: 4240371656349063687}
   - component: {fileID: 6013131514264700171}
   - component: {fileID: 2661856687470268346}
@@ -36,7 +36,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4779266711067914848
+--- !u!114 &-734125825169592159
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,10 +45,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6657358835584236377}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1367d5a3e1b87fb48b11555394729615, type: 3}
+  m_Script: {fileID: 11500000, guid: d1705b2d1b0364142a0f2e6feb095f2f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemController
-  item: {fileID: 6657358835584236377}
+  m_EditorClassIdentifier: Assembly-CSharp::DiamondPickUp
 --- !u!212 &4240371656349063687
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -187,7 +186,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0

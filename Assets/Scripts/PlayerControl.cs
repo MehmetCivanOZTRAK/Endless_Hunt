@@ -18,15 +18,6 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         
     }
-    private void Update()
-    {
-       /* if (isDead) return;
-        _moveVector = new Vector2(
-            Input.GetAxisRaw("Horizontal"),
-            Input.GetAxisRaw("Vertical")
-            );*/
-    }
-
     private void FixedUpdate()
     {
         Move();

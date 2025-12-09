@@ -1,3 +1,4 @@
+using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -10,6 +11,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private GameObject diamondPrefab;
     [Range(0f, 100f)]
     [SerializeField] private float diamondDropChance = 100f;
+    [SerializeField] private GameObject damagePopUpPrefab;
  
     [SerializeField] private Score scoreManager;
 
@@ -81,9 +83,19 @@ public class EnemyController : MonoBehaviour
         if (collision.tag == "Bullet")
         {
             health--;
+            if(damagePopUpPrefab != null)
+            {   Vector3 randomOffset = new Vector3(Random.Range(-0.2f, 0.2f), 1f, 0);
+                GameObject damagePopUp = Instantiate(damagePopUpPrefab, transform.position + randomOffset, Quaternion.identity);
+                
+                damagePopUp.GetComponent<DamagePopUp>().Setup(1);
+                
+
+            
+            
+            }
         }
     }
-    private void DropDiamond()
+    private void DropDiamond()  
     {
         float randomValue = Random.Range(0f, 100f);
         if (randomValue <= diamondDropChance)

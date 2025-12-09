@@ -15,7 +15,7 @@ public class DamagePopUp : MonoBehaviour
         _textDamage.text = damageAmount.ToString();
         _textColor = _textDamage.color;
 
-        _moveVector = new Vector3(Random.Range(-0.5f, 0.5f), 0.5f, 0);
+        _moveVector = new Vector3(Random.Range(-0.5f, 0.5f), 1f, 0);
     }
     private void Update()
     {

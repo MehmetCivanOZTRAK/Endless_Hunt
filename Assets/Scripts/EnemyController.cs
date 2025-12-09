@@ -84,10 +84,10 @@ public class EnemyController : MonoBehaviour
         {
             health--;
             if(damagePopUpPrefab != null)
-            {   Vector3 randomOffset = new Vector3(Random.Range(-0.2f, 0.2f), 1f, 0);
+            {   Vector3 randomOffset = new Vector3(Random.Range(-0.2f, 0.2f), 0.7f, 0);
                 GameObject damagePopUp = Instantiate(damagePopUpPrefab, transform.position + randomOffset, Quaternion.identity);
                 
-                damagePopUp.GetComponent<DamagePopUp>().Setup(1);
+                damagePopUp.GetComponent<DamagePopUp>().Setup(10);
                 
 
             

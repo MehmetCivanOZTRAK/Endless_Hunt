@@ -14,6 +14,8 @@ public class LevelManager : MonoBehaviour
     [Header("Level Canavarları")]
     [SerializeField] private GameObject[] _enemyPrefabs; 
 
+    [SerializeField] private int _levellimit = 3;
+
     private int _currentLevel = -1; 
 
     private void Start()
@@ -33,17 +35,24 @@ public class LevelManager : MonoBehaviour
         _currentLevel++;
 
         UpdateLevelText();
-        AddNewEnemyToSpawners(); // İsim değişikliği: Update yerine Add
+        AddNewEnemyToSpawners(); 
 
         Debug.Log($"Level {_currentLevel + 1} başladı! Yeni canavar havuza eklendi.");
     }
 
     private void AddNewEnemyToSpawners()
     {
-        // Eğer level sayısı canavar sayısını geçerse hata vermesin, son canavarı eklemeye devam etmesin diye kontrol
-        if (_currentLevel >= _enemyPrefabs.Length) return;
 
-        GameObject newEnemyType = _enemyPrefabs[_currentLevel];
+        if(_currentLevel % _levellimit != 0)
+        {
+            return;
+        }
+
+        int enemyindex = _currentLevel / _levellimit;
+        
+        if (enemyindex >= _enemyPrefabs.Length) return;
+        
+        GameObject newEnemyType = _enemyPrefabs[enemyindex];
 
         foreach (var spawner in _spawners)
         {
@@ -54,6 +63,7 @@ public class LevelManager : MonoBehaviour
 
                 // Eskileri silmeden YENİSİNİ EKLE
                 spawner.AddEnemyToPool(newEnemyType);
+                Debug.Log($"Spawner'a yeni canavar eklendi: {newEnemyType.name}");
             }
         }
     }

@@ -97,6 +97,22 @@ public class PlayerHealth : MonoBehaviour
         {
             GetDamage(10f);
         }
+        if(collision.CompareTag("EnemySef"))
+        {
+            GetDamage(20f);
+        }
+        if(collision.CompareTag("EnemyOrc"))
+        {
+            GetDamage(40f);
+        }
+        if(collision.CompareTag("EnemyMan"))
+        {
+            GetDamage(50f);
+        }
+        if(collision.CompareTag("EnemyVikings"))
+        {
+            GetDamage(30f);
+        }
     }
 
     public void AddHealth(float health)

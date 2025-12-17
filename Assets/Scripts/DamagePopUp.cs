@@ -8,6 +8,7 @@ public class DamagePopUp : MonoBehaviour
     [SerializeField] private float _disapperTimer = 1f;
     private Vector3 _moveVector;
     private Color _textColor;
+    
 
 
     public void Setup(int damageAmount)

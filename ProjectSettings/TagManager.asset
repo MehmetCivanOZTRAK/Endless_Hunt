@@ -8,6 +8,10 @@ TagManager:
   - Bullet
   - Item
   - Diamond
+  - EnemyVikings
+  - EnemyMan
+  - EnemyOrc
+  - EnemySef
   layers:
   - Default
   - TransparentFX

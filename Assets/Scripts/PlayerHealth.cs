@@ -7,6 +7,7 @@ public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private float _maxHealth;
     [SerializeField] private GameObject _gameoverpanel;
+    [SerializeField] private DamageController damagescript;
     private bool _isDead = false;
     private Animator _animator;
     private Rigidbody2D _rigidbody2D;
@@ -14,7 +15,7 @@ public class PlayerHealth : MonoBehaviour
     private float _currentHealth;
     public HealthBar healthBar;
     
-    private readonly int DEATH_HASH = Animator.StringToHash("Hurt");
+    //private readonly int DEATH_HASH = Animator.StringToHash("Hurt");
 
     private void Start()
     {
@@ -26,18 +27,6 @@ public class PlayerHealth : MonoBehaviour
         _playerController = GetComponent<PlayerController>();
 
     }
-
-   /* private void Update()
-    {
-        if (_currentHealth <= 0 && !_isDead)
-        {
-            _isDead = true;
-            Destroy(gameObject);
-            _currentHealth = 0;
-            _animator.SetBool(DEATH_HASH, true);
-            StartCoroutine(DeathLoading());
-        }
-    }*/
     private IEnumerator DeathLoading()
     {
         yield return new WaitForSecondsRealtime(0.1f);
@@ -49,24 +38,32 @@ public class PlayerHealth : MonoBehaviour
     {
         //if (_isDead) return;
         _currentHealth -= damage;
-        healthBar.SetHealth(_currentHealth);
-        _animator.SetTrigger("Hurt");
+        healthBar.SetHealth(_currentHealth); 
+      //  _animator.SetTrigger("Hurt");
+      
+      if (damagescript != null)
+        {
+            damagescript.GetHit();
+        }
+    
         if (_currentHealth <= 0)
         {
             Die();
             _currentHealth = 0;
             
         }
+        
+        
     }
     private void Die()
     {
        if(_isDead) return;
         _isDead = true;
 
-        if (_animator != null)
+        /*if (_animator != null)
         {
             _animator.SetBool(DEATH_HASH, true);
-        }
+        }*/
         if (_playerController != null)
         {
             _playerController.OnDeath();

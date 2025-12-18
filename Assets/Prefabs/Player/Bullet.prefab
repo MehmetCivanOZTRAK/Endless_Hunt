@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8154295461665511203
+--- !u!1 &4439648609390936279
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2721241095915866522}
-  - component: {fileID: 6363999784370827824}
-  - component: {fileID: -4839028624565998505}
-  - component: {fileID: 1729770907245253691}
-  - component: {fileID: 8636950863035959265}
-  - component: {fileID: 3952665726629864229}
-  m_Layer: 6
-  m_Name: EnemyVikings
-  m_TagString: EnemyVikings
+  - component: {fileID: 1621685468435055028}
+  - component: {fileID: 3484699710548805192}
+  - component: {fileID: -4247343092847819045}
+  - component: {fileID: 9094722725026844928}
+  - component: {fileID: -7575518496356577328}
+  m_Layer: 0
+  m_Name: Bullet
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2721241095915866522
+--- !u!4 &1621685468435055028
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8154295461665511203}
+  m_GameObject: {fileID: 4439648609390936279}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.1591, y: 7.12929, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalRotation: {x: 0, y: 0, z: -0.8320918, w: 0.5546379}
+  m_LocalPosition: {x: 0.623, y: 0.206, z: 0}
+  m_LocalScale: {x: 0.10127831, y: 0.10485164, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &6363999784370827824
+--- !u!212 &3484699710548805192
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8154295461665511203}
+  m_GameObject: {fileID: 4439648609390936279}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -80,12 +79,12 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -1869315837
-  m_SortingLayer: 1
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -1607745040358044367, guid: 88f1f622b541dbf8db626ad67ad877f8,
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 5
+  m_Sprite: {fileID: 5110702915124773887, guid: 4a7b7f89b37af7d47be245ab0938f165,
     type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.381132, g: 0.2869862, b: 0.28117472, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -95,61 +94,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-4839028624565998505
+--- !u!114 &-4247343092847819045
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8154295461665511203}
+  m_GameObject: {fileID: 4439648609390936279}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cda5d9d1f826a72d0b552d58f4018339, type: 3}
+  m_Script: {fileID: 11500000, guid: f4e0185982e67d14db2c466af5e971ea, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyVikingsController
-  damageAmount: 30
-  speed: 1
-  stoppingDistance: 0
-  diamondPrefab: {fileID: 6657358835584236377, guid: b18e1baa9de551345933959c0d742d10,
-    type: 3}
-  diamondDropChance: 100
-  damagePopUpPrefab: {fileID: 3597694353391276193, guid: c379bd714b7a7294790d45940ec8b9ee,
-    type: 3}
-  scoreManager: {fileID: 0}
---- !u!50 &1729770907245253691
-Rigidbody2D:
-  serializedVersion: 5
+  m_EditorClassIdentifier: 
+  speed: 5
+  damage: 0
+--- !u!58 &9094722725026844928
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8154295461665511203}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!70 &8636950863035959265
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8154295461665511203}
+  m_GameObject: {fileID: 4439648609390936279}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -173,32 +138,36 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0442338, y: 0.011651516}
-  m_Size: {x: 1.9203043, y: 3.9718103}
-  m_Direction: 0
---- !u!95 &3952665726629864229
-Animator:
-  serializedVersion: 7
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 2.2075465
+--- !u!50 &-7575518496356577328
+Rigidbody2D:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8154295461665511203}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3e7a8979b3945cf85a57e4caa23c6755, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_GameObject: {fileID: 4439648609390936279}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

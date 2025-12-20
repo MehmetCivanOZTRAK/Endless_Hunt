@@ -82,7 +82,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -1607745040358044367, guid: ce749fcf3b6d0c84ca08c976e8acf76a,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -195,12 +195,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   speed: 2
   stoppingDistance: 0
-  damageAmount: 10
+  DamageToPlayerAmount: 10
   diamondPrefab: {fileID: 6657358835584236377, guid: b18e1baa9de551345933959c0d742d10,
     type: 3}
   damagePopUpPrefab: {fileID: 3597694353391276193, guid: c379bd714b7a7294790d45940ec8b9ee,
     type: 3}
+  DamageNumber: 10
   vaporizationEffectPrefab: {fileID: 3916730185823572660, guid: 2d5ec4c5299e2565b8a96704ff63c0a7,
     type: 3}
   diamondDropChance: 100
   scoreManager: {fileID: 0}
+  health: 1

@@ -1,5 +1,3 @@
-
-using UnityEditor.U2D;
 using UnityEngine;
 
 public class DamageController : MonoBehaviour

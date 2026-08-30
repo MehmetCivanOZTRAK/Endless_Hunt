@@ -53,6 +53,16 @@ namespace EndlessHunt.UI.Common
             if (icon != null) icon.sprite = sprite;
         }
 
+        public void Bind(GameProfileUIAdapter adapter)
+        {
+            if (profileAdapter != null) profileAdapter.ProfileChanged -= HandleProfileChanged;
+            profileAdapter = adapter;
+            if (profileAdapter == null || !isActiveAndEnabled) return;
+            profileAdapter.ProfileChanged -= HandleProfileChanged;
+            profileAdapter.ProfileChanged += HandleProfileChanged;
+            profileAdapter.Refresh(true);
+        }
+
         public void Refresh()
         {
             if (profileAdapter == null) return;

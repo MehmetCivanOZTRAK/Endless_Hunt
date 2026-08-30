@@ -34,8 +34,19 @@ namespace EndlessHunt.UI
         public int GetGems() => GameProfile.Gems;
         public int GetEnergy() => GameProfile.Energy;
         public int GetEnergyMaximum() => GameProfile.MaxEnergy;
+        public int GetBattleEnergyCost() => GameProfile.BattleEnergyCost;
         public string GetEnergyTimer() => GameProfile.EnergyTimer();
         public int GetPlayerLevel() => Mathf.Max(1, PlayerPrefs.GetInt("EH_PlayerLevel", 20));
+        public int GetSelectedStage() => GameProfile.SelectedStage;
+        public int GetHighestStage() => GameProfile.HighestStage;
+        public int GetBestScore() => GameProfile.BestScore;
+        public string GetStageName(int index)
+        {
+            if (GameCatalog.MapNames.Length == 0) return string.Empty;
+            return GameCatalog.MapNames[Mathf.Clamp(index, 0, GameCatalog.MapNames.Length - 1)];
+        }
+        public void SetSelectedStage(int index) => GameProfile.SelectedStage = index;
+        public bool TrySpendBattleEnergy() => GameProfile.SpendEnergy(GameProfile.BattleEnergyCost);
         public int GetUpgradeLevel(int index) => Mathf.Max(1, PlayerPrefs.GetInt("EH2_Upgrade_" + index, 1));
         public bool Owns(string itemId) => !string.IsNullOrEmpty(itemId) && GameProfile.Owns(itemId);
         public string GetEquippedGearId(GearSlot slot) => GameProfile.Equipped(slot);

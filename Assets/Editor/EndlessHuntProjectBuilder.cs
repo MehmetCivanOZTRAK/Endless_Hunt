@@ -42,7 +42,8 @@ public static class EndlessHuntProjectBuilder
         ConfigureMobilePlayer();
         WeaponDefinition[] weapons = EndlessHuntWeaponAssetBuilder.BuildAll();
         Sprite[] enemies = FindEnemySprites();
-        EndlessHuntUICoreBuilder.BuildAssets();
+        EndlessHuntUICoreBuilder.EnsureAssets();
+        EndlessHuntMainMenuBuilder.EnsureAssets();
 
         bool menuChanged = EnsureMenuScene("Assets/Scenes/MainMenu.unity", startPrefab, weapons, overwriteScenes);
         bool gameChanged = EnsureGameScene("Assets/Scenes/GameScene.unity", startPrefab, weapons, enemies, -1, overwriteScenes);
@@ -52,7 +53,9 @@ public static class EndlessHuntProjectBuilder
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        if (menuChanged || gameChanged || gameTwoChanged)
+        if (menuChanged)
+            EndlessHuntMainMenuBuilder.IntegrateMainMenuScene();
+        else if (gameChanged || gameTwoChanged)
             EditorSceneManager.OpenScene("Assets/Scenes/MainMenu.unity", OpenSceneMode.Single);
         Debug.Log(overwriteScenes
             ? "Endless Hunt explicit destructive gameplay-scene rebuild complete. UI Core prefab assets were preserved."

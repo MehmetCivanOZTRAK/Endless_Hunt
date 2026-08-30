@@ -108,11 +108,13 @@ namespace EndlessHunt
             toastPanel.SetActive(false);
             confirmationPanel.SetActive(false);
             _selectedWeapon = Mathf.Max(0, Array.FindIndex(weapons, item => item != null && item.id == GameProfile.EquippedWeaponId));
+            RefreshTopBar();
+            StartCoroutine(RefreshEnergyDisplay());
             RefreshCharacters();
             ShowPage(0, 2);
         }
 
-        private void Update()
+        private void RefreshTopBar()
         {
             coinText.text = GameProfile.Coins.ToString("N0");
             gemText.text = GameProfile.Gems.ToString("N0");
@@ -120,6 +122,17 @@ namespace EndlessHunt
             energyTimerText.text = GameProfile.EnergyTimer();
             playerNameText.text = "Player " + (69252009 + GameProfile.BestScore);
             playerLevelText.text = "LV." + Mathf.Max(1, PlayerPrefs.GetInt("EH_PlayerLevel", 20));
+        }
+
+        private IEnumerator RefreshEnergyDisplay()
+        {
+            var wait = new WaitForSecondsRealtime(1f);
+            while (enabled)
+            {
+                energyText.text = GameProfile.Energy + "/" + GameProfile.MaxEnergy;
+                energyTimerText.text = GameProfile.EnergyTimer();
+                yield return wait;
+            }
         }
 
         private void ShowPage(int page, int navigationIndex)
@@ -153,7 +166,7 @@ namespace EndlessHunt
         {
             int selected = GameProfile.SelectedStage;
             stageTitle.text = $"{selected + 1}. {GameCatalog.MapNames[selected]}";
-            bestScoreText.text = $"En Uzun Hayatta Kalma:  {GameProfile.BestScore / 60:00}m {GameProfile.BestScore % 60:00}s";
+            bestScoreText.text = "EN İYİ SKOR:  " + GameProfile.BestScore.ToString("N0");
         }
 
         private void CycleStage(int delta)
@@ -165,7 +178,7 @@ namespace EndlessHunt
 
         private void StartGame()
         {
-            if (!GameProfile.SpendEnergy(5)) { FlashMessage("YETERLİ ENERJİ YOK"); return; }
+            if (!GameProfile.SpendEnergy(GameProfile.BattleEnergyCost)) { FlashMessage("YETERLİ ENERJİ YOK"); return; }
             SceneManager.LoadScene("GameScene");
         }
 
@@ -221,7 +234,7 @@ namespace EndlessHunt
         private void SelectGear(GearDefinition gear)
         {
             if (!GameProfile.Buy(gear)) { FlashMessage("YETERLİ ELMAS YOK"); return; }
-            RefreshCharacters(); RefreshEquipment(); FlashMessage(gear.title + " GİYİLDİ");
+            RefreshCharacters(); RefreshEquipment(); RefreshTopBar(); FlashMessage(gear.title + " GİYİLDİ");
         }
 
         private void SelectInventoryWeapon(int index)
@@ -291,7 +304,7 @@ namespace EndlessHunt
             if (_pendingPurchase == null) return;
             if (!GameProfile.BuyWeapon(_pendingPurchase)) { CloseConfirmation(); FlashMessage("YETERLİ ELMAS YOK"); return; }
             string title = _pendingPurchase.title;
-            CloseConfirmation(); RefreshCharacters(); RefreshWeapons(); FlashMessage(title + " SATIN ALINDI");
+            CloseConfirmation(); RefreshCharacters(); RefreshWeapons(); RefreshTopBar(); FlashMessage(title + " SATIN ALINDI");
         }
 
         private void CloseConfirmation() { confirmationPanel.SetActive(false); _pendingPurchase = null; }
@@ -300,7 +313,7 @@ namespace EndlessHunt
         {
             WeaponDefinition selected = weapons[_selectedWeapon];
             if (!GameProfile.UpgradeWeapon(selected)) { FlashMessage("YETERLİ ALTIN YOK"); return; }
-            RefreshCharacters(); RefreshWeapons(); FlashMessage(selected.title + " GELİŞTİRİLDİ");
+            RefreshCharacters(); RefreshWeapons(); RefreshTopBar(); FlashMessage(selected.title + " GELİŞTİRİLDİ");
         }
 
         private void RefreshUpgrades()
@@ -322,7 +335,7 @@ namespace EndlessHunt
             if (GameProfile.Coins < cost) { FlashMessage("YETERLİ ALTIN YOK"); return; }
             GameProfile.Coins -= cost;
             PlayerPrefs.SetInt("EH2_Upgrade_" + index, level + 1);
-            PlayerPrefs.Save(); RefreshUpgrades();
+            PlayerPrefs.Save(); RefreshUpgrades(); RefreshTopBar();
         }
 
         private Sprite GearIcon(GearDefinition gear)

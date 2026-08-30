@@ -6,6 +6,22 @@ using UnityEngine.UI;
 
 public static class EndlessHuntUICoreBuilder
 {
+    private static readonly string[] RequiredPrefabNames =
+    {
+        "UIRoot",
+        "UI_Button",
+        "UI_CurrencyDisplay",
+        "UI_ProgressBar",
+        "UI_NotificationBadge",
+        "UI_ItemCard",
+        "UI_EquipmentSlot",
+        "UI_TalentNode",
+        "UI_RewardItem",
+        "UI_PopupFrame",
+        "UI_Toast",
+        "UI_TabButton"
+    };
+
     [MenuItem("Endless Hunt/UI/Build Or Refresh UI Core Assets")]
     public static void BuildAssets()
     {
@@ -20,6 +36,20 @@ public static class EndlessHuntUICoreBuilder
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         Debug.Log("Endless Hunt UI Core assets refreshed without modifying gameplay scenes.");
+    }
+
+    public static void EnsureAssets()
+    {
+        bool missingTheme = AssetDatabase.LoadAssetAtPath<UITheme>(EndlessHuntUIPrefabFactory.ThemePath) == null;
+        bool missingPrefab = System.Array.Exists(RequiredPrefabNames,
+            name => AssetDatabase.LoadAssetAtPath<GameObject>(EndlessHuntUIPrefabFactory.PrefabPath(name)) == null);
+        if (missingTheme || missingPrefab)
+        {
+            BuildAssets();
+            return;
+        }
+
+        Debug.Log("Preserved existing UI Core assets; all required prefabs and theme are present.");
     }
 
     private static void EnsureFolders()

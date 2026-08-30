@@ -51,6 +51,7 @@ namespace EndlessHunt
     {
         private const string Prefix = "EH3_";
         public const int MaxEnergy = 20;
+        public const int BattleEnergyCost = 5;
         public const string StartingWeaponId = "weapon_03";
         public static int Coins { get => PlayerPrefs.GetInt(Prefix + "Coins", 800); set => SetInt("Coins", Mathf.Max(0, value)); }
         public static int Gems { get => PlayerPrefs.GetInt(Prefix + "Gems", 1200); set => SetInt("Gems", Mathf.Max(0, value)); }
@@ -116,7 +117,7 @@ namespace EndlessHunt
         }
         public static string EnergyTimer()
         {
-            RefreshEnergy(); if (Energy >= 20) return "DOLU";
+            RefreshEnergy(); if (Energy >= MaxEnergy) return "DOLU";
             var left = TimeSpan.FromMinutes(10) - (DateTime.UtcNow - new DateTime(ReadTicks(), DateTimeKind.Utc));
             if (left.TotalSeconds < 0) left = TimeSpan.Zero;
             return $"{left.Minutes:00}:{left.Seconds:00}";

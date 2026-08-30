@@ -39,10 +39,11 @@ namespace EndlessHunt.UI
         {
             if (index < 0 || index >= tabs.Count || tabs[index] == null || !tabs[index].IsInteractable) return false;
             UITabButton selected = tabs[index];
+            if (screenManager != null && !string.IsNullOrWhiteSpace(selected.TargetScreenId) &&
+                !screenManager.Open(selected.TargetScreenId))
+                return false;
             foreach (UITabButton tab in tabs) if (tab != null) tab.SetActive(tab == selected);
             ActiveTab = selected;
-            if (screenManager != null && !string.IsNullOrWhiteSpace(selected.TargetScreenId))
-                screenManager.Open(selected.TargetScreenId);
             return true;
         }
 

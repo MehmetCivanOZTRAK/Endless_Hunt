@@ -1,10 +1,9 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using EndlessHunt;
 using EndlessHunt.UI;
 using EndlessHunt.UI.Common;
 using EndlessHunt.UI.Screens;
-using Spine.Unity;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -16,8 +15,15 @@ public static class EndlessHuntMainMenuBuilder
 {
     public const string HomePrefabPath = "Assets/EndlessHunt/UI/Screens/Home/UI_HomeScreen.prefab";
     private const string MainMenuScenePath = "Assets/Scenes/MainMenu.unity";
-    private const string StartPrefabPath = "Assets/CharacterPrefabs/Character_20260827_211359.prefab";
     private const string MainMenuToastName = "Main Menu Toast";
+    private const string MainMenuSettingsName = "Main Menu Settings Popup";
+    private const string MapAssetFolder =
+        "Assets/Layer Lab/2D Art Maker/AMCasual Character/Demo/Map/";
+
+    private static readonly string[] StageDecorPaths =
+    {
+        "tent.png", "building2.png", "car1.png", "tree3.png", "campfire.png"
+    };
 
     private readonly struct CurrencyViews
     {
@@ -35,19 +41,17 @@ public static class EndlessHuntMainMenuBuilder
 
     private readonly struct StageViews
     {
+        public readonly UIStageCarousel Carousel;
         public readonly Text Number;
         public readonly Text Name;
         public readonly Text Score;
-        public readonly Button Previous;
-        public readonly Button Next;
 
-        public StageViews(Text number, Text name, Text score, Button previous, Button next)
+        public StageViews(UIStageCarousel carousel, Text number, Text name, Text score)
         {
+            Carousel = carousel;
             Number = number;
             Name = name;
             Score = score;
-            Previous = previous;
-            Next = next;
         }
     }
 
@@ -85,13 +89,9 @@ public static class EndlessHuntMainMenuBuilder
         EnsureFolder("Assets/EndlessHunt/UI/Screens/Home");
 
         UITheme theme = AssetDatabase.LoadAssetAtPath<UITheme>(EndlessHuntUIPrefabFactory.ThemePath);
-        GameObject startPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(StartPrefabPath);
-        WeaponDefinition[] weapons = LoadWeapons();
         if (theme == null) throw new MissingReferenceException("EndlessHuntUITheme.asset is missing.");
-        if (startPrefab == null) throw new MissingReferenceException("Main Menu character source prefab is missing.");
-        if (weapons.Length == 0) throw new MissingReferenceException("Weapon definitions are missing.");
 
-        BuildHomePrefab(theme, startPrefab, weapons);
+        BuildHomePrefab(theme);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         Debug.Log("UI_HomeScreen prefab refreshed from UI Core and Vector UI Pack assets.");
@@ -116,7 +116,9 @@ public static class EndlessHuntMainMenuBuilder
         GameObject homePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(HomePrefabPath);
         GameObject toastPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(
             EndlessHuntUIPrefabFactory.PrefabPath("UI_Toast"));
-        if (uiRootPrefab == null || homePrefab == null || toastPrefab == null)
+        GameObject settingsPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(
+            EndlessHuntUIPrefabFactory.PrefabPath("UI_PopupFrame"));
+        if (uiRootPrefab == null || homePrefab == null || toastPrefab == null || settingsPrefab == null)
             throw new MissingReferenceException("Main Menu integration prefabs are missing.");
 
         UIRoot[] existingRoots = UnityEngine.Object.FindObjectsByType<UIRoot>(
@@ -136,6 +138,9 @@ public static class EndlessHuntMainMenuBuilder
         foreach (UIToast existing in uiRoot.ToastLayer.GetComponentsInChildren<UIToast>(true))
             if (existing.gameObject.name == MainMenuToastName)
                 UnityEngine.Object.DestroyImmediate(existing.gameObject);
+        foreach (UIPopup existing in uiRoot.PopupLayer.GetComponentsInChildren<UIPopup>(true))
+            if (existing.gameObject.name == MainMenuSettingsName)
+                UnityEngine.Object.DestroyImmediate(existing.gameObject);
 
         GameObject homeInstance = (GameObject)PrefabUtility.InstantiatePrefab(homePrefab, uiRoot.ScreenLayer);
         homeInstance.name = "HomeScreen";
@@ -152,12 +157,31 @@ public static class EndlessHuntMainMenuBuilder
         UIToast toast = toastInstance.GetComponent<UIToast>();
         toast.HideImmediate();
 
-        presenter.BindServices(uiRoot.ProfileAdapter, uiRoot.ScreenManager, toast);
+        GameObject settingsInstance = (GameObject)PrefabUtility.InstantiatePrefab(
+            settingsPrefab, uiRoot.PopupLayer);
+        settingsInstance.name = MainMenuSettingsName;
+        Stretch(settingsInstance.GetComponent<RectTransform>());
+        UIPopup settingsPopup = settingsInstance.GetComponent<UIPopup>();
+        UIPopupFrame settingsFrame = settingsInstance.GetComponent<UIPopupFrame>();
+        RectTransform settingsCard = settingsInstance.transform.Find("Popup Card") as RectTransform;
+        settingsPopup.Configure(HomeScreenPresenter.SettingsPopupId, settingsCard, true);
+        settingsFrame.SetTitle("AYARLAR");
+        settingsFrame.SetActionsVisible(false, false);
+        EndlessHuntUIPrefabFactory.Text(
+            "Settings Message", settingsFrame.ContentRoot,
+            "AYARLAR SONRAKİ AŞAMADA", 30, Color.white,
+            TextAnchor.MiddleCenter, Vector2.zero, Vector2.one,
+            new Vector2(28f, 20f), new Vector2(-28f, -20f), FontStyle.Bold);
+        settingsInstance.SetActive(false);
+
+        presenter.BindServices(
+            uiRoot.ProfileAdapter, uiRoot.ScreenManager, uiRoot.PopupManager, toast);
         uiRoot.ScreenManager.Configure(uiRoot.ScreenLayer, presenter.Screen);
         uiRoot.PopupManager.Configure(uiRoot.PopupLayer);
         PrefabUtility.RecordPrefabInstancePropertyModifications(presenter);
         PrefabUtility.RecordPrefabInstancePropertyModifications(uiRoot.ScreenManager);
         PrefabUtility.RecordPrefabInstancePropertyModifications(uiRoot.PopupManager);
+        PrefabUtility.RecordPrefabInstancePropertyModifications(settingsPopup);
 
         foreach (SurvivorMenu legacyMenu in UnityEngine.Object.FindObjectsByType<SurvivorMenu>(
                      FindObjectsInactive.Include, FindObjectsSortMode.None))
@@ -183,7 +207,7 @@ public static class EndlessHuntMainMenuBuilder
         Debug.Log("MainMenu scene now uses one active UIRoot and preserves the disabled legacy menu.");
     }
 
-    private static void BuildHomePrefab(UITheme theme, GameObject startPrefab, WeaponDefinition[] weapons)
+    private static void BuildHomePrefab(UITheme theme)
     {
         RectTransform root = EndlessHuntUIPrefabFactory.Root(
             "UI_HomeScreen",
@@ -204,7 +228,7 @@ public static class EndlessHuntMainMenuBuilder
         RectTransform content = EndlessHuntUIPrefabFactory.Rect(
             "Home Layout", root, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
         VerticalLayoutGroup vertical = content.gameObject.AddComponent<VerticalLayoutGroup>();
-        vertical.padding = new RectOffset(18, 18, 16, 16);
+        vertical.padding = new RectOffset(18, 18, 10, 10);
         vertical.spacing = theme.smallSpacing;
         vertical.childAlignment = TextAnchor.UpperCenter;
         vertical.childControlWidth = true;
@@ -215,8 +239,8 @@ public static class EndlessHuntMainMenuBuilder
         Text levelText;
         CurrencyViews currencies = BuildTopBar(content, theme, out levelText);
         Button settingsButton;
-        SkeletonGraphic preview = BuildHero(content, theme, startPrefab, out settingsButton);
-        StageViews stage = BuildStagePanel(content, theme);
+        UIStageCarousel carousel = BuildStageCarousel(content, theme, out settingsButton);
+        StageViews stage = BuildStageInfo(content, theme, carousel);
         Button playButton;
         UIButton playButtonView;
         Text energyCost;
@@ -231,13 +255,10 @@ public static class EndlessHuntMainMenuBuilder
             currencies.Coins,
             currencies.Gems,
             currencies.Energy,
-            preview,
-            weapons,
+            stage.Carousel,
             stage.Number,
             stage.Name,
             stage.Score,
-            stage.Previous,
-            stage.Next,
             playButton,
             playButtonView,
             energyCost,
@@ -256,15 +277,15 @@ public static class EndlessHuntMainMenuBuilder
 
     private static CurrencyViews BuildTopBar(Transform parent, UITheme theme, out Text levelText)
     {
-        RectTransform top = Section("Top Bar", parent, 176f);
+        RectTransform top = Section("Top Bar", parent, 116f);
         Image topBackground = top.gameObject.AddComponent<Image>();
         topBackground.sprite = EndlessHuntUIPrefabFactory.Ui("Modals/topBarEmpty.png");
         topBackground.color = Color.white;
         topBackground.raycastTarget = false;
 
         HorizontalLayoutGroup row = top.gameObject.AddComponent<HorizontalLayoutGroup>();
-        row.padding = new RectOffset(12, 12, 10, 10);
-        row.spacing = 10f;
+        row.padding = new RectOffset(8, 8, 6, 6);
+        row.spacing = 6f;
         row.childAlignment = TextAnchor.MiddleCenter;
         row.childControlWidth = true;
         row.childControlHeight = true;
@@ -272,43 +293,39 @@ public static class EndlessHuntMainMenuBuilder
         row.childForceExpandHeight = true;
 
         RectTransform profile = EndlessHuntUIPrefabFactory.Root(
-            "Player Level", new Vector2(236f, 150f), typeof(Image), typeof(LayoutElement));
+            "Player Level", new Vector2(220f, 100f), typeof(Image), typeof(LayoutElement));
         profile.SetParent(top, false);
         Image profileBackground = profile.GetComponent<Image>();
         profileBackground.sprite = EndlessHuntUIPrefabFactory.Ui("Cards/cardShop_yellow.png");
         profileBackground.raycastTarget = false;
         EndlessHuntUIPrefabFactory.ApplySliced(profileBackground);
         LayoutElement profileLayout = profile.GetComponent<LayoutElement>();
-        profileLayout.minWidth = 220f;
-        profileLayout.preferredWidth = 236f;
+        profileLayout.minWidth = 210f;
+        profileLayout.preferredWidth = 220f;
 
         Image avatar = EndlessHuntUIPrefabFactory.Image(
             "Avatar", profile,
             EndlessHuntUIPrefabFactory.Ui("Icons/128px/adventure_icon_128px.png"),
-            new Vector2(.03f, .12f), new Vector2(.39f, .88f),
+            new Vector2(.03f, .08f), new Vector2(.36f, .92f),
             Vector2.zero, Vector2.zero, Color.white);
         avatar.preserveAspect = true;
-        EndlessHuntUIPrefabFactory.Text(
-            "Profile Label", profile, "KAHRAMAN", theme.captionSize, theme.textPrimary,
-            TextAnchor.MiddleLeft, new Vector2(.4f, .5f), new Vector2(.98f, .86f),
-            Vector2.zero, Vector2.zero, FontStyle.Bold);
         levelText = EndlessHuntUIPrefabFactory.Text(
-            "Level", profile, "LV. 1", theme.bodySize, theme.accent,
-            TextAnchor.MiddleLeft, new Vector2(.4f, .14f), new Vector2(.98f, .54f),
+            "Level", profile, "LV. 1", theme.bodySize, theme.textPrimary,
+            TextAnchor.MiddleLeft, new Vector2(.38f, .12f), new Vector2(.98f, .88f),
             Vector2.zero, Vector2.zero, FontStyle.Bold);
 
-        UICurrencyDisplay coins = BuildCurrency(top, theme, UICurrencyType.Coins,
-            "Coins", "Labels/coin_label.png", "Icons/128px/coin_icon_128px.png");
-        UICurrencyDisplay gems = BuildCurrency(top, theme, UICurrencyType.Gems,
-            "Gems", "Labels/gem_label.png", "Icons/128px/gem_icon_128px.png");
         UICurrencyDisplay energy = BuildCurrency(top, theme, UICurrencyType.Energy,
-            "Energy", "Labels/energy_label.png", "Icons/128px/energy_icon_128px.png");
+            "Energy", "Icons/128px/energy_icon_128px.png", 264f);
+        UICurrencyDisplay gems = BuildCurrency(top, theme, UICurrencyType.Gems,
+            "Gems", "Icons/128px/gem_icon_128px.png", 240f);
+        UICurrencyDisplay coins = BuildCurrency(top, theme, UICurrencyType.Coins,
+            "Coins", "Icons/128px/coin_icon_128px.png", 240f);
         return new CurrencyViews(coins, gems, energy);
     }
 
     private static UICurrencyDisplay BuildCurrency(
         Transform parent, UITheme theme, UICurrencyType type, string name,
-        string backgroundPath, string iconPath)
+        string iconPath, float preferredWidth)
     {
         GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(
             EndlessHuntUIPrefabFactory.PrefabPath("UI_CurrencyDisplay"));
@@ -316,76 +333,91 @@ public static class EndlessHuntMainMenuBuilder
         instance.name = name;
 
         LayoutElement layout = instance.GetComponent<LayoutElement>();
-        layout.minWidth = 230f;
-        layout.preferredWidth = 252f;
-        layout.flexibleWidth = 1f;
+        layout.minWidth = preferredWidth - 12f;
+        layout.preferredWidth = preferredWidth;
+        layout.flexibleWidth = 0f;
+        layout.minHeight = 76f;
+        layout.preferredHeight = 96f;
         Image background = instance.GetComponent<Image>();
-        background.sprite = EndlessHuntUIPrefabFactory.Ui(backgroundPath);
+        background.sprite = EndlessHuntUIPrefabFactory.Ui("Labels/label_backgroundV2.png");
         background.color = Color.white;
+
+        HorizontalLayoutGroup row = instance.GetComponent<HorizontalLayoutGroup>();
+        row.padding = new RectOffset(8, 10, 7, 7);
+        row.spacing = 5f;
 
         Image icon = instance.transform.Find("Icon").GetComponent<Image>();
         icon.sprite = EndlessHuntUIPrefabFactory.Ui(iconPath);
-        icon.GetComponent<LayoutElement>().preferredWidth = 50f;
+        icon.GetComponent<LayoutElement>().preferredWidth = 44f;
         Text value = instance.transform.Find("Value").GetComponent<Text>();
-        value.fontSize = theme.bodySize;
-        value.GetComponent<LayoutElement>().preferredWidth =
-            type == UICurrencyType.Energy ? 82f : 100f;
+        value.fontSize = theme.bodySize - 2;
+        value.GetComponent<LayoutElement>().preferredWidth = type == UICurrencyType.Energy ? 112f : 104f;
         Text timer = instance.transform.Find("Timer").GetComponent<Text>();
-        timer.fontSize = theme.captionSize - 2;
-        timer.GetComponent<LayoutElement>().preferredWidth = 58f;
-        timer.gameObject.SetActive(type == UICurrencyType.Energy);
+        timer.gameObject.SetActive(false);
 
         UICurrencyDisplay display = instance.GetComponent<UICurrencyDisplay>();
         display.Configure(type, null, icon, value, timer);
         return display;
     }
 
-    private static SkeletonGraphic BuildHero(
-        Transform parent, UITheme theme, GameObject startPrefab, out Button settingsButton)
+    private static UIStageCarousel BuildStageCarousel(
+        Transform parent, UITheme theme, out Button settingsButton)
     {
-        RectTransform hero = Section("Character Area", parent, 760f, 1f);
-        Image card = hero.gameObject.AddComponent<Image>();
-        card.sprite = EndlessHuntUIPrefabFactory.Ui("Containers/cardContainer_black.png");
-        card.color = Color.white;
-        card.raycastTarget = false;
-        EndlessHuntUIPrefabFactory.ApplySliced(card);
+        RectTransform area = Section("Map Stage Carousel", parent, 860f, 1f);
+        Image areaFrame = area.gameObject.AddComponent<Image>();
+        areaFrame.sprite = EndlessHuntUIPrefabFactory.Ui("Containers/cardContainer_black.png");
+        areaFrame.raycastTarget = false;
+        EndlessHuntUIPrefabFactory.ApplySliced(areaFrame);
 
-        Image map = EndlessHuntUIPrefabFactory.Image(
-            "Current Stage Backdrop", hero,
-            EndlessHuntSceneFactory.Sprite(
-                "Assets/Layer Lab/2D Art Maker/AMCasual Character/Demo/Map/background.png"),
-            new Vector2(.025f, .025f), new Vector2(.975f, .975f),
-            Vector2.zero, Vector2.zero, new Color(.7f, .86f, .74f, 1f));
-        map.type = Image.Type.Simple;
-        map.raycastTarget = false;
+        RectTransform scrollRoot = EndlessHuntUIPrefabFactory.Rect(
+            "MapCarousel", area, Vector2.zero, Vector2.one,
+            new Vector2(8f, 8f), new Vector2(-8f, -8f));
+        ScrollRect scrollRect = scrollRoot.gameObject.AddComponent<ScrollRect>();
+        RectTransform viewport = EndlessHuntUIPrefabFactory.Rect(
+            "Viewport", scrollRoot, Vector2.zero, Vector2.one,
+            new Vector2(46f, 10f), new Vector2(-46f, -10f));
+        Image viewportGraphic = viewport.gameObject.AddComponent<Image>();
+        viewportGraphic.color = new Color(1f, 1f, 1f, .001f);
+        viewportGraphic.raycastTarget = true;
+        viewport.gameObject.AddComponent<RectMask2D>();
 
-        Image atmosphere = EndlessHuntUIPrefabFactory.Image(
-            "Atmosphere", hero,
-            EndlessHuntUIPrefabFactory.Ui("Effects/effect_yellow.png"),
-            new Vector2(.18f, .02f), new Vector2(.82f, .68f),
-            Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, .34f));
-        atmosphere.raycastTarget = false;
+        RectTransform content = EndlessHuntUIPrefabFactory.Rect(
+            "Content", viewport, new Vector2(0f, 0f), new Vector2(0f, 1f),
+            Vector2.zero, Vector2.zero);
+        content.pivot = new Vector2(0f, .5f);
+        content.anchoredPosition = Vector2.zero;
+        HorizontalLayoutGroup layout = content.gameObject.AddComponent<HorizontalLayoutGroup>();
+        layout.padding = new RectOffset(92, 92, 12, 12);
+        layout.spacing = 24f;
+        layout.childAlignment = TextAnchor.MiddleCenter;
+        layout.childControlWidth = true;
+        layout.childControlHeight = true;
+        layout.childForceExpandWidth = false;
+        layout.childForceExpandHeight = true;
+        ContentSizeFitter fitter = content.gameObject.AddComponent<ContentSizeFitter>();
+        fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        fitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
 
-        Image title = EndlessHuntUIPrefabFactory.Image(
-            "Game Title", hero,
-            EndlessHuntUIPrefabFactory.Ui("Headers/header_blue.png"),
-            new Vector2(.22f, .84f), new Vector2(.78f, .985f),
-            Vector2.zero, Vector2.zero, Color.white);
-        EndlessHuntUIPrefabFactory.Text(
-            "Title", title.transform, "ENDLESS HUNT", theme.titleSize, theme.textPrimary,
-            TextAnchor.MiddleCenter, Vector2.zero, Vector2.one,
-            new Vector2(30f, 8f), new Vector2(-30f, -8f), FontStyle.Bold);
+        var cards = new List<UIStageCardView>(GameCatalog.MapNames.Length);
+        for (int i = 0; i < GameCatalog.MapNames.Length; i++)
+            cards.Add(BuildStageCard(content, theme, i));
 
-        SkeletonGraphic preview = EndlessHuntSceneFactory.SpineGraphic(
-            startPrefab, "Equipped Character Preview", hero,
-            new Vector2(.24f, .04f), new Vector2(.76f, .88f),
-            Vector2.zero, Vector2.zero, 2.25f);
+        scrollRect.content = content;
+        scrollRect.viewport = viewport;
+        scrollRect.horizontal = true;
+        scrollRect.vertical = false;
+        scrollRect.movementType = ScrollRect.MovementType.Clamped;
+        scrollRect.inertia = false;
+        scrollRect.scrollSensitivity = 0f;
+
+        UIStageCarousel carousel = scrollRoot.gameObject.AddComponent<UIStageCarousel>();
+        carousel.Configure(scrollRect, content, cards.ToArray());
 
         settingsButton = EndlessHuntSceneFactory.Button(
-            "Settings", hero,
+            "Settings", area,
             EndlessHuntUIPrefabFactory.Ui("Buttons/buttonSquare_blue.png"),
             string.Empty, theme.captionSize,
-            new Vector2(.865f, .855f), new Vector2(.97f, .975f),
+            new Vector2(.88f, .865f), new Vector2(.975f, .975f),
             Vector2.zero, Vector2.zero);
         Image settingsIcon = EndlessHuntUIPrefabFactory.Image(
             "Icon", settingsButton.transform,
@@ -393,42 +425,123 @@ public static class EndlessHuntMainMenuBuilder
             new Vector2(.16f, .16f), new Vector2(.84f, .84f),
             Vector2.zero, Vector2.zero, Color.white);
         settingsIcon.preserveAspect = true;
-        return preview;
+        return carousel;
     }
 
-    private static StageViews BuildStagePanel(Transform parent, UITheme theme)
+    private static UIStageCardView BuildStageCard(Transform parent, UITheme theme, int index)
     {
-        RectTransform stage = Section("Stage Area", parent, 188f);
+        RectTransform slot = EndlessHuntUIPrefabFactory.Root(
+            "StageCard_" + (index + 1), new Vector2(720f, 820f),
+            typeof(LayoutElement), typeof(UIStageCardView));
+        slot.SetParent(parent, false);
+        LayoutElement slotLayout = slot.GetComponent<LayoutElement>();
+        slotLayout.minWidth = 720f;
+        slotLayout.preferredWidth = 720f;
+        slotLayout.flexibleWidth = 0f;
+        slotLayout.minHeight = 680f;
+
+        RectTransform visual = EndlessHuntUIPrefabFactory.Rect(
+            "Stage Visual", slot, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+        CanvasGroup group = visual.gameObject.AddComponent<CanvasGroup>();
+        Image frame = visual.gameObject.AddComponent<Image>();
+        frame.sprite = EndlessHuntUIPrefabFactory.Ui("Containers/cardContainer_cream.png");
+        frame.raycastTarget = false;
+        EndlessHuntUIPrefabFactory.ApplySliced(frame);
+
+        Color ground = index < GameCatalog.MapGround.Length
+            ? GameCatalog.MapGround[index]
+            : theme.panel;
+        ground = Color.Lerp(ground, Color.white, .12f);
+        ground.a = 1f;
+        Image map = EndlessHuntUIPrefabFactory.Image(
+            "Map Artwork", visual,
+            EndlessHuntSceneFactory.Sprite(MapAssetFolder + "background.png"),
+            new Vector2(.035f, .035f), new Vector2(.965f, .965f),
+            Vector2.zero, Vector2.zero, ground);
+        map.type = Image.Type.Simple;
+        map.raycastTarget = false;
+
+        Image chapterHeader = EndlessHuntUIPrefabFactory.Image(
+            "Chapter Badge", visual,
+            EndlessHuntUIPrefabFactory.Ui("Headers/header_yellow.png"),
+            new Vector2(.25f, .84f), new Vector2(.75f, .975f),
+            Vector2.zero, Vector2.zero, Color.white);
+        EndlessHuntUIPrefabFactory.Text(
+            "Chapter", chapterHeader.transform, "BÖLÜM " + (index + 1), theme.bodySize,
+            theme.textPrimary, TextAnchor.MiddleCenter, Vector2.zero, Vector2.one,
+            new Vector2(20f, 6f), new Vector2(-20f, -6f), FontStyle.Bold);
+
+        string primaryPath = StageDecorPaths[index % StageDecorPaths.Length];
+        Image primary = EndlessHuntUIPrefabFactory.Image(
+            "Map Landmark", visual, EndlessHuntSceneFactory.Sprite(MapAssetFolder + primaryPath),
+            new Vector2(.2f, .19f), new Vector2(.8f, .76f),
+            Vector2.zero, Vector2.zero, Color.white);
+        primary.preserveAspect = true;
+        primary.raycastTarget = false;
+
+        string secondaryPath = index switch
+        {
+            0 => "campfire.png",
+            1 => "object4.png",
+            2 => "building2.png",
+            3 => "object5.png",
+            _ => "object6.png"
+        };
+        Image secondary = EndlessHuntUIPrefabFactory.Image(
+            "Map Detail", visual, EndlessHuntSceneFactory.Sprite(MapAssetFolder + secondaryPath),
+            new Vector2(.07f, .1f), new Vector2(.34f, .38f),
+            Vector2.zero, Vector2.zero, Color.white);
+        secondary.preserveAspect = true;
+        secondary.raycastTarget = false;
+
+        Image lockedOverlay = EndlessHuntUIPrefabFactory.Image(
+            "Locked Overlay", visual,
+            EndlessHuntUIPrefabFactory.Ui("Containers/cardContainer_black.png"),
+            new Vector2(.035f, .035f), new Vector2(.965f, .965f),
+            Vector2.zero, Vector2.zero, new Color(.08f, .09f, .13f, .86f));
+        EndlessHuntUIPrefabFactory.ApplySliced(lockedOverlay);
+        Image key = EndlessHuntUIPrefabFactory.Image(
+            "Lock Icon", lockedOverlay.transform,
+            EndlessHuntUIPrefabFactory.Ui("Icons/128px/key_icon_128px.png"),
+            new Vector2(.38f, .46f), new Vector2(.62f, .7f),
+            Vector2.zero, Vector2.zero, Color.white);
+        key.preserveAspect = true;
+        Text lockText = EndlessHuntUIPrefabFactory.Text(
+            "Locked Label", lockedOverlay.transform, "KİLİTLİ", theme.titleSize,
+            theme.warning, TextAnchor.MiddleCenter,
+            new Vector2(.12f, .3f), new Vector2(.88f, .47f),
+            Vector2.zero, Vector2.zero, FontStyle.Bold);
+
+        UIStageCardView view = slot.GetComponent<UIStageCardView>();
+        view.Configure(index, visual, group, frame, lockedOverlay.gameObject, lockText);
+        view.SetState(index == 0, index == 0);
+        return view;
+    }
+
+    private static StageViews BuildStageInfo(
+        Transform parent, UITheme theme, UIStageCarousel carousel)
+    {
+        RectTransform stage = Section("Stage Info", parent, 174f);
         Image background = stage.gameObject.AddComponent<Image>();
         background.sprite = EndlessHuntUIPrefabFactory.Ui("Modals/modalSimple_v2.png");
         background.color = Color.white;
         background.raycastTarget = false;
         EndlessHuntUIPrefabFactory.ApplySliced(background);
 
-        Button previous = EndlessHuntSceneFactory.Button(
-            "Previous Stage", stage,
-            EndlessHuntUIPrefabFactory.Ui("Buttons/buttonSquare_blue.png"), "‹", 48,
-            new Vector2(.025f, .16f), new Vector2(.14f, .84f),
-            Vector2.zero, Vector2.zero);
-        Button next = EndlessHuntSceneFactory.Button(
-            "Next Stage", stage,
-            EndlessHuntUIPrefabFactory.Ui("Buttons/buttonSquare_blue.png"), "›", 48,
-            new Vector2(.86f, .16f), new Vector2(.975f, .84f),
-            Vector2.zero, Vector2.zero);
         Text number = EndlessHuntUIPrefabFactory.Text(
             "Stage Number", stage, "BÖLÜM 1", theme.captionSize, theme.accent,
-            TextAnchor.MiddleCenter, new Vector2(.15f, .67f), new Vector2(.85f, .94f),
+            TextAnchor.MiddleCenter, new Vector2(.08f, .69f), new Vector2(.92f, .96f),
             Vector2.zero, Vector2.zero, FontStyle.Bold);
         Text name = EndlessHuntUIPrefabFactory.Text(
             "Stage Name", stage, "YEŞİL KAMP", theme.titleSize - 4,
             new Color(.12f, .09f, .16f, 1f), TextAnchor.MiddleCenter,
-            new Vector2(.15f, .27f), new Vector2(.85f, .7f),
+            new Vector2(.08f, .28f), new Vector2(.92f, .72f),
             Vector2.zero, Vector2.zero, FontStyle.Bold);
         Text score = EndlessHuntUIPrefabFactory.Text(
             "Best Score", stage, "EN İYİ SKOR  0", theme.bodySize, theme.secondary,
-            TextAnchor.MiddleCenter, new Vector2(.15f, .05f), new Vector2(.85f, .3f),
+            TextAnchor.MiddleCenter, new Vector2(.08f, .04f), new Vector2(.92f, .31f),
             Vector2.zero, Vector2.zero, FontStyle.Bold);
-        return new StageViews(number, name, score, previous, next);
+        return new StageViews(carousel, number, name, score);
     }
 
     private static void BuildPlayArea(
@@ -483,7 +596,7 @@ public static class EndlessHuntMainMenuBuilder
 
     private static NavigationViews BuildNavigation(Transform parent, UITheme theme)
     {
-        RectTransform navigation = Section("Bottom Navigation", parent, 158f);
+        RectTransform navigation = Section("Bottom Navigation", parent, 142f);
         Image background = navigation.gameObject.AddComponent<Image>();
         background.sprite = EndlessHuntUIPrefabFactory.Ui("Containers/ButtonContainer.png");
         background.color = Color.white;
@@ -491,27 +604,27 @@ public static class EndlessHuntMainMenuBuilder
         EndlessHuntUIPrefabFactory.ApplySliced(background);
 
         HorizontalLayoutGroup group = navigation.gameObject.AddComponent<HorizontalLayoutGroup>();
-        group.padding = new RectOffset(10, 10, 8, 8);
-        group.spacing = 7f;
+        group.padding = new RectOffset(8, 8, 7, 7);
+        group.spacing = 5f;
         group.childAlignment = TextAnchor.MiddleCenter;
         group.childControlWidth = true;
         group.childControlHeight = true;
-        group.childForceExpandWidth = true;
+        group.childForceExpandWidth = false;
         group.childForceExpandHeight = true;
 
         UITabController controller = navigation.gameObject.AddComponent<UITabController>();
         UITabButton home = BuildTab(
             navigation, theme, "Home", HomeScreenPresenter.ScreenId, "ANA SAYFA",
-            "Buttons/adventure_1ButtonDefault.png", "Buttons/adventureButtonPressed.png");
+            "Icons/128px/adventure_icon_128px.png");
         UITabButton equipment = BuildTab(
             navigation, theme, "Equipment", "Equipment", "EKİPMAN",
-            "Buttons/equipment_1ButtonDefault.png", "Buttons/equipmentButtonPressed.png");
+            "Icons/128px/armor_icon_128px.png");
         UITabButton talent = BuildTab(
             navigation, theme, "Talent", "Talent", "YETENEK",
-            "Buttons/skills_1ButtonDefault.png", "Buttons/skillsButtonPressed.png");
+            "Icons/128px/skills_icon_128px.png");
         UITabButton shop = BuildTab(
             navigation, theme, "Shop", "Shop", "MAĞAZA",
-            "Buttons/shop_1ButtonDefault.png", "Buttons/shopButtonPressed.png");
+            "Icons/128px/shop_icon_128px.png");
 
         controller.Register(home);
         controller.Register(equipment);
@@ -526,33 +639,45 @@ public static class EndlessHuntMainMenuBuilder
         string id,
         string targetScreen,
         string labelText,
-        string inactivePath,
-        string activePath)
+        string iconPath)
     {
         GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(
             EndlessHuntUIPrefabFactory.PrefabPath("UI_TabButton"));
         GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
         instance.name = id + " Tab";
         LayoutElement layout = instance.GetComponent<LayoutElement>();
-        layout.minWidth = 150f;
-        layout.preferredWidth = 250f;
-        layout.flexibleWidth = 1f;
-        layout.minHeight = 112f;
-        layout.preferredHeight = 138f;
+        layout.minWidth = 210f;
+        layout.preferredWidth = 220f;
+        layout.flexibleWidth = 0f;
+        layout.minHeight = 108f;
+        layout.preferredHeight = 126f;
         Image background = instance.GetComponent<Image>();
         Button button = instance.GetComponent<Button>();
         Image selection = instance.transform.Find("Selected").GetComponent<Image>();
+        selection.gameObject.SetActive(false);
         UINotificationBadge badge = instance.GetComponentInChildren<UINotificationBadge>(true);
         badge.Hide();
         Text label = instance.transform.Find("Label").GetComponent<Text>();
         label.text = labelText;
-        label.fontSize = theme.captionSize;
-        Sprite inactive = EndlessHuntUIPrefabFactory.Ui(inactivePath);
-        Sprite active = EndlessHuntUIPrefabFactory.Ui(activePath);
+        label.fontSize = theme.captionSize - 1;
+        label.rectTransform.anchorMin = new Vector2(.04f, .02f);
+        label.rectTransform.anchorMax = new Vector2(.96f, .31f);
+        label.rectTransform.offsetMin = Vector2.zero;
+        label.rectTransform.offsetMax = Vector2.zero;
+        Image icon = EndlessHuntUIPrefabFactory.Image(
+            "Navigation Icon", instance.transform,
+            EndlessHuntUIPrefabFactory.Ui(iconPath),
+            new Vector2(.31f, .27f), new Vector2(.69f, .91f),
+            Vector2.zero, Vector2.zero, Color.white);
+        icon.preserveAspect = true;
+        icon.raycastTarget = false;
+        Sprite inactive = EndlessHuntUIPrefabFactory.Ui("Buttons/segment_black.png");
+        Sprite active = EndlessHuntUIPrefabFactory.Ui("Buttons/segment_yellow.png");
         background.sprite = inactive;
         UITabButton tab = instance.GetComponent<UITabButton>();
-        tab.Configure(id, targetScreen, button, background, selection, badge,
+        tab.Configure(id, targetScreen, button, background, null, badge,
             active, inactive, theme.buttonDisabled);
+        tab.ConfigureExpansion(layout, 220f, 330f);
         return tab;
     }
 
@@ -570,16 +695,6 @@ public static class EndlessHuntMainMenuBuilder
         layout.preferredHeight = preferredHeight;
         layout.flexibleHeight = flexibleHeight;
         return section;
-    }
-
-    private static WeaponDefinition[] LoadWeapons()
-    {
-        return AssetDatabase.FindAssets("t:WeaponDefinition", new[] { "Assets/EndlessHunt/Data/Weapons" })
-            .Select(AssetDatabase.GUIDToAssetPath)
-            .Select(AssetDatabase.LoadAssetAtPath<WeaponDefinition>)
-            .Where(item => item != null)
-            .OrderBy(item => item.id, StringComparer.Ordinal)
-            .ToArray();
     }
 
     private static void EnsureFolder(string path)

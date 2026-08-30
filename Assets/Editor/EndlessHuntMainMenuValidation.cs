@@ -37,8 +37,8 @@ public static class EndlessHuntMainMenuValidation
         }
 
         Debug.Log(
-            "MAIN MENU VALIDATION PASSED: prefab wiring, scene integration, character preview, " +
-            "real profile/stage/energy presentation, prepared navigation and 1080x1920/2160/2340 safe areas.");
+            "MAIN MENU VALIDATION PASSED: character-free map carousel, ScrollRect paging, scene integration, " +
+            "real profile/stage/energy presentation, expanded active navigation and 1080x1920/2160/2340 safe areas.");
     }
 
     private static void ValidateHomePrefab(List<string> errors)
@@ -70,9 +70,20 @@ public static class EndlessHuntMainMenuValidation
             errors.Add("UI_HomeScreen presenter has an unassigned prefab reference.");
         if (screen.ScreenId != HomeScreenPresenter.ScreenId)
             errors.Add("UI_HomeScreen must use the Home screen id.");
-        if (presenter.CharacterPreview == null ||
-            presenter.CharacterPreview.SkeletonDataAsset == null)
-            errors.Add("Equipped character preview is missing its Spine SkeletonDataAsset.");
+        if (prefab.GetComponentsInChildren<SkeletonGraphic>(true).Length != 0)
+            errors.Add("Home screen must not contain a character preview.");
+        if (presenter.StageCarousel == null ||
+            presenter.StageCarousel.CardCount != GameCatalog.MapNames.Length)
+            errors.Add("Stage carousel must contain exactly the real GameCatalog stage count.");
+        ScrollRect scrollRect = presenter.StageCarousel != null
+            ? presenter.StageCarousel.GetComponent<ScrollRect>()
+            : null;
+        if (scrollRect == null || !scrollRect.horizontal || scrollRect.vertical || scrollRect.inertia)
+            errors.Add("Stage carousel must use a horizontal, paging-friendly ScrollRect without inertia.");
+        UIStageCardView[] stageCards = prefab.GetComponentsInChildren<UIStageCardView>(true);
+        if (stageCards.Length != GameCatalog.MapNames.Length ||
+            stageCards.Where((card, index) => card == null || card.StageIndex != index).Any())
+            errors.Add("Stage card ordering must match GameCatalog.MapNames.");
         if (presenter.PlayButton == null ||
             presenter.PlayButton.GetComponent<UIButton>() == null)
             errors.Add("Primary Play CTA must use the reusable UIButton component.");
@@ -97,8 +108,17 @@ public static class EndlessHuntMainMenuValidation
                     tabs[i].TabId != expectedIds[i] ||
                     tabs[i].TargetScreenId != expectedTargets[i])
                     errors.Add("Bottom navigation tab " + i + " has incorrect id/target wiring.");
+                else if (tabs[i].ActivePreferredWidth <= tabs[i].InactivePreferredWidth)
+                    errors.Add("Bottom navigation tab " + i + " does not expand when active.");
+                else if (tabs[i].transform.Find("Navigation Icon") == null)
+                    errors.Add("Bottom navigation tab " + i + " is missing its explicit icon.");
             }
         }
+
+        Transform topBar = prefab.transform.Find("Home Layout/Top Bar");
+        LayoutElement topLayout = topBar != null ? topBar.GetComponent<LayoutElement>() : null;
+        if (topLayout == null || topLayout.preferredHeight > 120f)
+            errors.Add("Top bar must remain compact and no taller than 120 reference pixels.");
 
         if (prefab.GetComponentsInChildren<VerticalLayoutGroup>(true).Length == 0 ||
             prefab.GetComponentsInChildren<HorizontalLayoutGroup>(true).Length < 2)
@@ -146,12 +166,17 @@ public static class EndlessHuntMainMenuValidation
                 errors.Add("UIRoot SafeArea/PopupLayer/ToastLayer references are missing.");
 
             var serialized = new SerializedObject(home);
-            foreach (string propertyName in new[] { "profileAdapter", "screenManager", "toast" })
+            foreach (string propertyName in new[] { "profileAdapter", "screenManager", "popupManager", "toast" })
             {
                 SerializedProperty property = serialized.FindProperty(propertyName);
                 if (property == null || property.objectReferenceValue == null)
                     errors.Add("Scene HomeScreen has an unassigned service: " + propertyName + ".");
             }
+            UIPopup[] settingsPopups = root.PopupLayer.GetComponentsInChildren<UIPopup>(true)
+                .Where(popup => popup.PopupId == HomeScreenPresenter.SettingsPopupId)
+                .ToArray();
+            if (settingsPopups.Length != 1)
+                errors.Add("MainMenu must contain exactly one UI Core Settings popup.");
         }
 
         if (!scene.IsValid()) errors.Add("MainMenu scene could not be opened.");
@@ -198,6 +223,8 @@ public static class EndlessHuntMainMenuValidation
 
             if (!tabs.SelectTab("Home") || tabs.ActiveTab != home)
                 errors.Add("Home tab could not become active.");
+            if (home.CurrentPreferredWidth <= future.CurrentPreferredWidth)
+                errors.Add("Active Home tab must be wider than inactive tabs.");
             if (tabs.SelectTab("Equipment") ||
                 tabs.ActiveTab != home ||
                 screens.ActiveScreen != homeScreen)
@@ -226,11 +253,12 @@ public static class EndlessHuntMainMenuValidation
     private static UITabButton CreateTab(Transform parent, string id, string target)
     {
         var gameObject = new GameObject(id, typeof(RectTransform), typeof(Image), typeof(Button),
-            typeof(UITabButton));
+            typeof(LayoutElement), typeof(UITabButton));
         gameObject.transform.SetParent(parent, false);
         UITabButton tab = gameObject.GetComponent<UITabButton>();
         tab.Configure(id, target, gameObject.GetComponent<Button>(), gameObject.GetComponent<Image>(),
             null, null, null, null, null);
+        tab.ConfigureExpansion(gameObject.GetComponent<LayoutElement>(), 100f, 160f);
         return tab;
     }
 

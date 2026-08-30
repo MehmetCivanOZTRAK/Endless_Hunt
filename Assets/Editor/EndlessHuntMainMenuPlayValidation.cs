@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using EndlessHunt;
 using EndlessHunt.UI;
 using EndlessHunt.UI.Screens;
 using UnityEditor;
@@ -26,6 +27,9 @@ public static class EndlessHuntMainMenuPlayValidation
 
     private static double _nextActionAt;
     private static bool _captureRequested;
+    private static bool _carouselExercisePending;
+    private static int _carouselOriginalIndex;
+    private static int _carouselTargetIndex;
 
     static EndlessHuntMainMenuPlayValidation()
     {
@@ -61,6 +65,7 @@ public static class EndlessHuntMainMenuPlayValidation
         if (state == PlayModeStateChange.EnteredPlayMode)
         {
             ValidateRuntime();
+            BeginCarouselExercise();
             SetResolution(0);
         }
         else if (state == PlayModeStateChange.EnteredEditMode)
@@ -94,6 +99,7 @@ public static class EndlessHuntMainMenuPlayValidation
         Vector2Int resolution = Resolutions[index];
         if (!_captureRequested)
         {
+            if (_carouselExercisePending) ValidateCarouselExerciseAndRestore();
             RenderCurrentMenu(resolution);
             _captureRequested = true;
             _nextActionAt = EditorApplication.timeSinceStartup + 1.25d;
@@ -217,14 +223,62 @@ public static class EndlessHuntMainMenuPlayValidation
         Assert(home.gameObject.activeInHierarchy, "Runtime HomeScreen is not active.");
         Assert(root.ScreenManager.ActiveScreen == home.Screen,
             "UIScreenManager did not open Home as the initial screen.");
-        Assert(home.CharacterPreview != null &&
-               home.CharacterPreview.Skeleton != null,
-            "Runtime equipped character preview did not initialize.");
+        Assert(home.GetComponentInChildren<Spine.Unity.SkeletonGraphic>(true) == null,
+            "Runtime character preview must not exist on Home.");
+        Assert(home.StageCarousel != null &&
+               home.StageCarousel.CardCount == GameCatalog.MapNames.Length,
+            "Runtime stage carousel does not match the real stage count.");
         Assert(home.PlayButton != null, "Runtime Play button is missing.");
         Assert(home.EnergyDisplay != null, "Runtime Energy display is missing.");
 
         foreach (var tab in home.BottomTabs)
             Assert(tab != null, "Runtime bottom navigation contains a missing tab.");
+        if (home.BottomTabs.Length == 4 && home.BottomTabs.All(tab => tab != null))
+        {
+            Assert(home.BottomTabs[0].CurrentPreferredWidth > home.BottomTabs[1].CurrentPreferredWidth,
+                "Runtime active Home tab is not expanded.");
+        }
+
+        Assert(home.SettingsButton != null, "Runtime Settings button is missing.");
+        if (home.SettingsButton != null)
+        {
+            home.SettingsButton.onClick.Invoke();
+            Assert(root.PopupManager.HasOpenPopup &&
+                   root.PopupManager.TopPopup.PopupId == HomeScreenPresenter.SettingsPopupId,
+                "Runtime Settings button did not open the UI Core popup.");
+            Assert(root.PopupManager.TryCloseTopOnBack(false),
+                "Runtime back action did not close the Settings popup.");
+        }
+    }
+
+    private static void BeginCarouselExercise()
+    {
+        HomeScreenPresenter home = Object.FindFirstObjectByType<HomeScreenPresenter>();
+        if (home == null || home.StageCarousel == null || home.StageCarousel.CardCount < 2) return;
+        _carouselOriginalIndex = home.StageCarousel.SelectedIndex;
+        _carouselTargetIndex = (_carouselOriginalIndex + 1) % home.StageCarousel.CardCount;
+        _carouselExercisePending = home.StageCarousel.SelectIndex(_carouselTargetIndex, true);
+    }
+
+    private static void ValidateCarouselExerciseAndRestore()
+    {
+        _carouselExercisePending = false;
+        HomeScreenPresenter home = Object.FindFirstObjectByType<HomeScreenPresenter>();
+        if (home == null || home.StageCarousel == null) return;
+        UIStageCarousel carousel = home.StageCarousel;
+        Assert(!carousel.IsSnapping && carousel.SelectedIndex == _carouselTargetIndex,
+            "Runtime stage carousel did not finish snap paging.");
+        ScrollRect scrollRect = carousel.GetComponent<ScrollRect>();
+        Assert(scrollRect != null &&
+               Mathf.Abs(scrollRect.horizontalNormalizedPosition - carousel.TargetNormalizedPosition) < .02f,
+            "Runtime stage carousel did not center the selected card.");
+        Assert(home.StageNumberView != null &&
+               home.StageNumberView.text == "BÖLÜM " + (_carouselTargetIndex + 1),
+            "Runtime stage number did not update after swipe.");
+        Assert(home.StageNameView != null &&
+               home.StageNameView.text == GameCatalog.MapNames[_carouselTargetIndex].ToUpperInvariant(),
+            "Runtime stage name did not update after swipe.");
+        carousel.SelectIndex(_carouselOriginalIndex, false);
     }
 
     private static void Assert(bool condition, string message)
@@ -244,7 +298,12 @@ public static class EndlessHuntMainMenuPlayValidation
             condition.StartsWith("Runtime equipped") ||
             condition.StartsWith("Runtime Play") ||
             condition.StartsWith("Runtime Energy") ||
-            condition.StartsWith("Runtime bottom"))
+            condition.StartsWith("Runtime bottom") ||
+            condition.StartsWith("Runtime active") ||
+            condition.StartsWith("Runtime character") ||
+            condition.StartsWith("Runtime stage") ||
+            condition.StartsWith("Runtime Settings") ||
+            condition.StartsWith("Runtime back"))
             return;
         SessionState.SetInt(ErrorKey, SessionState.GetInt(ErrorKey, 0) + 1);
     }

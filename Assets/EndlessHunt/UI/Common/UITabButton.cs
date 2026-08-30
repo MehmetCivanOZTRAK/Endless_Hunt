@@ -19,10 +19,16 @@ namespace EndlessHunt.UI.Common
         [SerializeField] private Sprite activeSprite;
         [SerializeField] private Sprite inactiveSprite;
         [SerializeField] private Sprite disabledSprite;
+        [SerializeField] private LayoutElement layoutElement;
+        [SerializeField] private float inactiveWidth;
+        [SerializeField] private float activeWidth;
 
         public string TabId => tabId;
         public string TargetScreenId => targetScreenId;
         public bool IsInteractable => button != null && button.interactable;
+        public float CurrentPreferredWidth => layoutElement != null ? layoutElement.preferredWidth : 0f;
+        public float InactivePreferredWidth => inactiveWidth;
+        public float ActivePreferredWidth => activeWidth;
         public UITabVisualState VisualState { get; private set; }
         public event Action<UITabButton> Clicked;
 
@@ -31,6 +37,14 @@ namespace EndlessHunt.UI.Common
             if (button == null) button = GetComponent<Button>();
             button.onClick.AddListener(NotifyClicked);
             ApplyState(false);
+        }
+
+        public void ConfigureExpansion(LayoutElement targetLayout, float compactWidth, float expandedWidth)
+        {
+            layoutElement = targetLayout;
+            inactiveWidth = Mathf.Max(0f, compactWidth);
+            activeWidth = Mathf.Max(inactiveWidth, expandedWidth);
+            ApplyState(VisualState == UITabVisualState.Active);
         }
 
         public void Configure(string id, string screenId, Button targetButton, Image targetBackground,
@@ -72,6 +86,8 @@ namespace EndlessHunt.UI.Common
                 notificationBadge != null && notificationBadge.IsVisible ? UITabVisualState.Notification :
                 UITabVisualState.Inactive;
             if (selectedIndicator != null) selectedIndicator.enabled = VisualState == UITabVisualState.Active;
+            if (layoutElement != null && inactiveWidth > 0f)
+                layoutElement.preferredWidth = VisualState == UITabVisualState.Active ? activeWidth : inactiveWidth;
             if (background == null) return;
             Sprite sprite = VisualState switch
             {

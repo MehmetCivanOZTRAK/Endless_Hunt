@@ -50,10 +50,11 @@ namespace EndlessHunt
     public static class GameProfile
     {
         private const string Prefix = "EH3_";
+        public const int MaxEnergy = 20;
         public const string StartingWeaponId = "weapon_03";
         public static int Coins { get => PlayerPrefs.GetInt(Prefix + "Coins", 800); set => SetInt("Coins", Mathf.Max(0, value)); }
         public static int Gems { get => PlayerPrefs.GetInt(Prefix + "Gems", 1200); set => SetInt("Gems", Mathf.Max(0, value)); }
-        public static int Energy { get { RefreshEnergy(); return PlayerPrefs.GetInt(Prefix + "Energy", 20); } }
+        public static int Energy { get { RefreshEnergy(); return PlayerPrefs.GetInt(Prefix + "Energy", MaxEnergy); } }
         public static int HighestStage { get => PlayerPrefs.GetInt(Prefix + "Stage", 1); set => SetInt("Stage", Mathf.Clamp(value, 1, GameCatalog.MapNames.Length)); }
         public static int BestScore { get => PlayerPrefs.GetInt(Prefix + "Best", 0); set => SetInt("Best", Mathf.Max(value, BestScore)); }
         public static int SelectedStage { get => PlayerPrefs.GetInt(Prefix + "SelectedStage", 0); set => SetInt("SelectedStage", Mathf.Clamp(value, 0, GameCatalog.MapNames.Length - 1)); }
@@ -107,7 +108,7 @@ namespace EndlessHunt
 
         public static bool SpendEnergy(int amount)
         {
-            RefreshEnergy(); int current = PlayerPrefs.GetInt(Prefix + "Energy", 20);
+            RefreshEnergy(); int current = PlayerPrefs.GetInt(Prefix + "Energy", MaxEnergy);
             if (current < amount) return false;
             PlayerPrefs.SetInt(Prefix + "Energy", current - amount);
             if (!PlayerPrefs.HasKey(Prefix + "EnergyTime")) PlayerPrefs.SetString(Prefix + "EnergyTime", DateTime.UtcNow.Ticks.ToString());
@@ -122,10 +123,10 @@ namespace EndlessHunt
         }
         private static void RefreshEnergy()
         {
-            int energy = PlayerPrefs.GetInt(Prefix + "Energy", 20); if (energy >= 20) return;
+            int energy = PlayerPrefs.GetInt(Prefix + "Energy", MaxEnergy); if (energy >= MaxEnergy) return;
             var elapsed = DateTime.UtcNow - new DateTime(ReadTicks(), DateTimeKind.Utc);
             int gained = Mathf.FloorToInt((float)elapsed.TotalMinutes / 10f); if (gained <= 0) return;
-            PlayerPrefs.SetInt(Prefix + "Energy", Mathf.Min(20, energy + gained));
+            PlayerPrefs.SetInt(Prefix + "Energy", Mathf.Min(MaxEnergy, energy + gained));
             PlayerPrefs.SetString(Prefix + "EnergyTime", DateTime.UtcNow.AddMinutes(-(elapsed.TotalMinutes % 10)).Ticks.ToString());
             PlayerPrefs.Save();
         }

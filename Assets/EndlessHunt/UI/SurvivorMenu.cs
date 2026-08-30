@@ -116,7 +116,7 @@ namespace EndlessHunt
         {
             coinText.text = GameProfile.Coins.ToString("N0");
             gemText.text = GameProfile.Gems.ToString("N0");
-            energyText.text = GameProfile.Energy + "/30";
+            energyText.text = GameProfile.Energy + "/" + GameProfile.MaxEnergy;
             energyTimerText.text = GameProfile.EnergyTimer();
             playerNameText.text = "Player " + (69252009 + GameProfile.BestScore);
             playerLevelText.text = "LV." + Mathf.Max(1, PlayerPrefs.GetInt("EH_PlayerLevel", 20));

@@ -57,7 +57,7 @@ internal static class EndlessHuntMenuSceneBuilder
             EndlessHuntSceneFactory.Ui("ProgressBars/progressBar_green.png"),Color.white,
             new Vector2(.48f,.12f),new Vector2(.96f,.34f),Vector2.zero,Vector2.zero).value=.62f;
 
-        ResourceCell(bar.transform,"Energy","Icons/128px/energy_icon_128px.png","20/30",new Vector2(.355f,.12f),new Vector2(.565f,.9f),out menu.energyText);
+        ResourceCell(bar.transform,"Energy","Icons/128px/energy_icon_128px.png","20/20",new Vector2(.355f,.12f),new Vector2(.565f,.9f),out menu.energyText);
         ResourceCell(bar.transform,"Gems","Icons/128px/gem_icon_128px.png","120",new Vector2(.57f,.12f),new Vector2(.775f,.9f),out menu.gemText);
         ResourceCell(bar.transform,"Coins","Icons/128px/coin_icon_128px.png","800",new Vector2(.78f,.12f),new Vector2(.995f,.9f),out menu.coinText);
         menu.energyTimerText = EndlessHuntSceneFactory.Text("Energy Timer",bar.transform,"DOLU",14,

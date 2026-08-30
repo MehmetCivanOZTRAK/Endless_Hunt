@@ -14,8 +14,24 @@ public static class EndlessHuntProjectBuilder
         "Assets/Layer Lab/2D Art Maker/AMCasual Character/Demo/SpineAnimation/Casual Character_SkeletonData.asset";
     private const string StartPrefabPath = "Assets/CharacterPrefabs/Character_20260827_211359.prefab";
 
-    [MenuItem("Endless Hunt/Rebuild Hierarchy-Based Mobile Game")]
+    [MenuItem("Endless Hunt/Ensure Mobile Game And UI Core")]
     public static void BuildProject()
+    {
+        BuildProjectInternal(false);
+    }
+
+    [MenuItem("Endless Hunt/Advanced/Rebuild Gameplay Scenes (Destructive)")]
+    public static void RebuildGameplayScenesDestructive()
+    {
+        if (Application.isBatchMode)
+            throw new BuildFailedException("Destructive scene rebuild is disabled in batch mode.");
+        if (!EditorUtility.DisplayDialog("Rebuild Gameplay Scenes?",
+                "This replaces MainMenu, GameScene and GameScene2. Use only when intentional. UI Core prefab assets remain safe.",
+                "Rebuild Scenes", "Cancel")) return;
+        BuildProjectInternal(true);
+    }
+
+    private static void BuildProjectInternal(bool overwriteScenes)
     {
         SkeletonDataAsset character = AssetDatabase.LoadAssetAtPath<SkeletonDataAsset>(CharacterPath);
         if (character == null)
@@ -26,33 +42,60 @@ public static class EndlessHuntProjectBuilder
         ConfigureMobilePlayer();
         WeaponDefinition[] weapons = EndlessHuntWeaponAssetBuilder.BuildAll();
         Sprite[] enemies = FindEnemySprites();
+        EndlessHuntUICoreBuilder.BuildAssets();
 
-        Scene menuScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-        EndlessHuntMenuSceneBuilder.Build(startPrefab, weapons);
-        EditorSceneManager.SaveScene(menuScene, "Assets/Scenes/MainMenu.unity");
-
-        BuildGameScene("Assets/Scenes/GameScene.unity", startPrefab, weapons, enemies, -1);
-        BuildGameScene("Assets/Scenes/GameScene2.unity", startPrefab, weapons, enemies, 1);
-
-        EditorBuildSettings.scenes = new[]
-        {
-            new EditorBuildSettingsScene("Assets/Scenes/MainMenu.unity", true),
-            new EditorBuildSettingsScene("Assets/Scenes/GameScene.unity", true),
-            new EditorBuildSettingsScene("Assets/Scenes/GameScene2.unity", true)
-        };
+        bool menuChanged = EnsureMenuScene("Assets/Scenes/MainMenu.unity", startPrefab, weapons, overwriteScenes);
+        bool gameChanged = EnsureGameScene("Assets/Scenes/GameScene.unity", startPrefab, weapons, enemies, -1, overwriteScenes);
+        bool gameTwoChanged = EnsureGameScene("Assets/Scenes/GameScene2.unity", startPrefab, weapons, enemies, 1, overwriteScenes);
+        EnsureBuildScenes("Assets/Scenes/MainMenu.unity", "Assets/Scenes/GameScene.unity",
+            "Assets/Scenes/GameScene2.unity");
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        EditorSceneManager.OpenScene("Assets/Scenes/MainMenu.unity", OpenSceneMode.Single);
-        Debug.Log("Endless Hunt hierarchy rebuild complete: Vector UI, Joystick Pack, LayerLab gear icons, " +
-                  "40 weapon assets, LayerLab map chunks, 120 enemies and 100 XP objects are prepared in scenes.");
+        if (menuChanged || gameChanged || gameTwoChanged)
+            EditorSceneManager.OpenScene("Assets/Scenes/MainMenu.unity", OpenSceneMode.Single);
+        Debug.Log(overwriteScenes
+            ? "Endless Hunt explicit destructive gameplay-scene rebuild complete. UI Core prefab assets were preserved."
+            : "Endless Hunt safe ensure complete. Existing gameplay scenes were preserved; UI Core assets are ready.");
     }
 
-    private static void BuildGameScene(string path, GameObject startPrefab, WeaponDefinition[] weapons, Sprite[] enemies, int forcedMap)
+    private static bool EnsureMenuScene(string path, GameObject startPrefab, WeaponDefinition[] weapons, bool overwrite)
     {
+        if (!overwrite && AssetDatabase.LoadAssetAtPath<SceneAsset>(path) != null)
+        {
+            Debug.Log("Preserved existing scene: " + path);
+            return false;
+        }
+        Scene menuScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        EndlessHuntMenuSceneBuilder.Build(startPrefab, weapons);
+        EditorSceneManager.SaveScene(menuScene, path);
+        return true;
+    }
+
+    private static bool EnsureGameScene(string path, GameObject startPrefab, WeaponDefinition[] weapons,
+        Sprite[] enemies, int forcedMap, bool overwrite)
+    {
+        if (!overwrite && AssetDatabase.LoadAssetAtPath<SceneAsset>(path) != null)
+        {
+            Debug.Log("Preserved existing scene: " + path);
+            return false;
+        }
         Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         EndlessHuntGameSceneBuilder.Build(startPrefab, weapons, enemies, forcedMap);
         EditorSceneManager.SaveScene(scene, path);
+        return true;
+    }
+
+    private static void EnsureBuildScenes(params string[] requiredPaths)
+    {
+        List<EditorBuildSettingsScene> scenes = EditorBuildSettings.scenes.ToList();
+        foreach (string path in requiredPaths)
+        {
+            EditorBuildSettingsScene existing = scenes.FirstOrDefault(item => item.path == path);
+            if (existing == null) scenes.Add(new EditorBuildSettingsScene(path, true));
+            else existing.enabled = true;
+        }
+        EditorBuildSettings.scenes = scenes.ToArray();
     }
 
     private static void ConfigureMobilePlayer()

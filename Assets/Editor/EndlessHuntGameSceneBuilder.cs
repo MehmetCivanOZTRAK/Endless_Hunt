@@ -1,4 +1,5 @@
 using EndlessHunt;
+using EndlessHunt.UI;
 using Spine.Unity;
 using UnityEditor;
 using UnityEngine;
@@ -138,14 +139,15 @@ internal static class EndlessHuntGameSceneBuilder
         }
     }
 
-    private static void BuildHud(SurvivalGame game)
+    internal static void BuildHud(SurvivalGame game)
     {
         Canvas canvas = EndlessHuntSceneFactory.Canvas("Battle Canvas");
         RectTransform safe = EndlessHuntSceneFactory.Rect("Safe Area", canvas.transform, Vector2.zero, Vector2.one,
             new Vector2(22f, 28f), new Vector2(-22f, -28f));
+        safe.gameObject.AddComponent<SafeAreaController>();
         Image header = EndlessHuntSceneFactory.Image("Battle Header", safe,
-            EndlessHuntSceneFactory.Ui("Modals/topBarEmpty.png"), new Vector2(0f, .885f), Vector2.one,
-            Vector2.zero, Vector2.zero, Color.white);
+            EndlessHuntSceneFactory.Ui("Panels/panel_black.png"), new Vector2(0f, 1f), Vector2.one,
+            new Vector2(0f, -205f), Vector2.zero, Color.white);
         game.timerText = EndlessHuntSceneFactory.Text("Timer", header.transform, "00:00", 42, Color.white,
             TextAnchor.UpperCenter, new Vector2(.33f, .48f), new Vector2(.67f, .96f), Vector2.zero, Vector2.zero,
             FontStyle.Bold);
@@ -169,7 +171,7 @@ internal static class EndlessHuntGameSceneBuilder
 
         game.pauseButton = EndlessHuntSceneFactory.Button("Pause", safe,
             EndlessHuntSceneFactory.Ui("Buttons/buttonSquare_blue.png"), "Ⅱ", 32,
-            new Vector2(.84f, .805f), new Vector2(.98f, .88f), Vector2.zero, Vector2.zero);
+            new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-150f, -350f), new Vector2(-25f, -225f));
 
         GameObject joystickPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Joystick Pack/Prefabs/Fixed Joystick.prefab");
         GameObject joystickObject = (GameObject)PrefabUtility.InstantiatePrefab(joystickPrefab, safe.transform);
@@ -182,35 +184,65 @@ internal static class EndlessHuntGameSceneBuilder
         joystickRect.sizeDelta = new Vector2(300f, 300f);
         game.movementJoystick = joystickObject.GetComponent<Joystick>();
 
+        BuildFeedback(game, canvas, safe);
         BuildLevelUpPanel(game, safe);
         BuildPausePanel(game, safe);
         BuildExitConfirmation(game, safe);
         BuildGameOverPanel(game, safe);
     }
 
+    private static void BuildFeedback(SurvivalGame game, Canvas canvas, RectTransform safe)
+    {
+        BattleFeedback feedback = canvas.gameObject.AddComponent<BattleFeedback>();
+        game.feedback = feedback; feedback.health = game.healthBar;
+        GameObject trail = Object.Instantiate(game.healthBar.gameObject, game.healthBar.transform.parent);
+        trail.name = "Health Damage Trail";
+        trail.transform.SetSiblingIndex(game.healthBar.transform.GetSiblingIndex());
+        feedback.delayedHealth = trail.GetComponent<Slider>();
+        feedback.delayedHealth.fillRect.GetComponent<Image>().color = new Color(1f,.72f,.25f);
+        game.healthBar.GetComponent<Image>().color = Color.clear;
+        feedback.damageOverlay = EndlessHuntSceneFactory.Image("Damage Screen Tint",canvas.transform,null,Vector2.zero,Vector2.one,Vector2.zero,Vector2.zero,new Color(.8f,.02f,.03f,0f));
+        feedback.damageOverlay.transform.SetAsFirstSibling();
+        feedback.healthLabel = EndlessHuntSceneFactory.Text("Health Percentage",game.healthBar.transform,"100%",20,Color.white,TextAnchor.MiddleCenter,Vector2.zero,Vector2.one,Vector2.zero,Vector2.zero,FontStyle.Bold);
+        RectTransform layer = EndlessHuntSceneFactory.Rect("Damage Number Pool",safe,Vector2.zero,Vector2.one,Vector2.zero,Vector2.zero);
+        feedback.damageLabels = new Text[20];
+        for(int i=0;i<20;i++)
+        {
+            Text number = EndlessHuntSceneFactory.Text("Damage "+i,layer,"",32,Color.clear,TextAnchor.MiddleCenter,new Vector2(.5f,.5f),new Vector2(.5f,.5f),new Vector2(-65f,-30f),new Vector2(65f,30f),FontStyle.Bold);
+            var outline = number.gameObject.AddComponent<Outline>(); outline.effectColor = new Color(.08f,.06f,.05f); outline.effectDistance = new Vector2(2f,-2f);
+            feedback.damageLabels[i] = number;
+        }
+    }
+
     private static void BuildLevelUpPanel(SurvivalGame game, Transform parent)
     {
         Image panel = EndlessHuntSceneFactory.Image("Level Up Panel (Prepared)", parent,
-            EndlessHuntSceneFactory.Ui("Modals/modal_base.png"), Vector2.zero, Vector2.one,
-            Vector2.zero, Vector2.zero, new Color(.75f, .82f, 1f, 1f), true);
+            null, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(.035f,.045f,.07f,.88f), true);
+        panel.gameObject.AddComponent<PopupMotion>();
         game.levelUpPanel = panel.gameObject;
-        game.levelUpTitle = EndlessHuntSceneFactory.Text("Title", panel.transform, "SEVİYE ATLADIN!", 46,
-            Color.white, TextAnchor.UpperCenter, new Vector2(.08f, .72f), new Vector2(.92f, .92f),
-            Vector2.zero, Vector2.zero, FontStyle.Bold);
-        game.choiceButtons = new Button[3];
-        game.choiceTexts = new Text[3];
+        Image ribbon = EndlessHuntSceneFactory.Image("Choice Ribbon",panel.transform,EndlessHuntSceneFactory.Ui("Headers/header_yellow.png"),new Vector2(.05f,.73f),new Vector2(.95f,.86f),Vector2.zero,Vector2.zero,Color.white);
+        game.levelUpTitle = EndlessHuntSceneFactory.Text("Title", ribbon.transform, "YETENEK SEÇ", 46,
+            Color.white, TextAnchor.MiddleCenter, Vector2.zero, Vector2.one, new Vector2(20f,10f),new Vector2(-20f,-10f),FontStyle.Bold);
+        game.choiceButtons = new Button[3]; game.choiceTexts = new Text[3]; game.choiceIcons = new Image[3]; game.choiceRanks = new Text[3];
+        string[] icons = { "sword", "energy", "adventure", "energy", "gem", "armor" };
+        game.upgradeIcons = new Sprite[6];
+        for(int i=0;i<6;i++) game.upgradeIcons[i] = EndlessHuntSceneFactory.Ui("Icons/128px/"+icons[i]+"_icon_128px.png");
         for (int i = 0; i < 3; i++)
         {
-            float top = .67f - i * .17f;
+            float left = .025f + i * .325f;
             Button button = EndlessHuntSceneFactory.Button($"Upgrade Choice {i + 1}", panel.transform,
-                EndlessHuntSceneFactory.Ui("Buttons/buttonAdvanced_purple.png"), "", 28,
-                new Vector2(.11f, top - .13f), new Vector2(.89f, top), Vector2.zero, Vector2.zero);
-            Text text = EndlessHuntSceneFactory.Text("Choice Text", button.transform, "GELİŞTİRME", 28,
-                Color.white, TextAnchor.MiddleCenter, Vector2.zero, Vector2.one,
-                new Vector2(24f, 10f), new Vector2(-24f, -10f), FontStyle.Bold);
+                EndlessHuntSceneFactory.Ui("Panels/panel_black.png"), "", 28,
+                new Vector2(left, .24f), new Vector2(left + .30f, .68f), Vector2.zero, Vector2.zero);
+            Image cap = EndlessHuntSceneFactory.Image("Card Header",button.transform,EndlessHuntSceneFactory.Ui("Headers/header_yellow.png"),new Vector2(0f,.85f),Vector2.one,Vector2.zero,Vector2.zero,Color.white);
+            game.choiceRanks[i] = EndlessHuntSceneFactory.Text("Rank",cap.transform,"YENİ",28,Color.white,TextAnchor.MiddleCenter,Vector2.zero,Vector2.one,Vector2.zero,Vector2.zero,FontStyle.Bold);
+            game.choiceIcons[i] = EndlessHuntSceneFactory.Image("Skill Icon",button.transform,game.upgradeIcons[i],new Vector2(.15f,.57f),new Vector2(.85f,.81f),Vector2.zero,Vector2.zero,Color.white);
+            game.choiceIcons[i].preserveAspect = true;
+            game.choiceTexts[i] = EndlessHuntSceneFactory.Text("Choice Text",button.transform,"GELİŞTİRME",30,
+                Color.white, TextAnchor.UpperCenter, new Vector2(.06f,.14f),new Vector2(.94f,.53f),new Vector2(6f,8f),new Vector2(-6f,-8f),FontStyle.Bold);
+            EndlessHuntSceneFactory.Text("Choose",button.transform,"SEÇ",26,new Color(1f,.82f,.22f),TextAnchor.MiddleCenter,new Vector2(.05f,.025f),new Vector2(.95f,.14f),Vector2.zero,Vector2.zero,FontStyle.Bold);
             game.choiceButtons[i] = button;
-            game.choiceTexts[i] = text;
         }
+        EndlessHuntSceneFactory.Text("Hint",panel.transform,"Güçlenmek için bir kart seç",30,Color.white,TextAnchor.MiddleCenter,new Vector2(.05f,.10f),new Vector2(.95f,.18f),Vector2.zero,Vector2.zero,FontStyle.Bold);
         panel.gameObject.SetActive(false);
     }
 
@@ -219,7 +251,7 @@ internal static class EndlessHuntGameSceneBuilder
         Image panel = EndlessHuntSceneFactory.Image("Pause Panel (Prepared)", parent,
             EndlessHuntSceneFactory.Ui("Modals/darkModal_dark.png"), Vector2.zero, Vector2.one,
             Vector2.zero, Vector2.zero, Color.white, true);
-        game.pausePanel = panel.gameObject;
+        game.pausePanel = panel.gameObject; panel.gameObject.AddComponent<PopupMotion>();
         EndlessHuntSceneFactory.Text("Title", panel.transform, "DURAKLATILDI", 52, Color.white,
             TextAnchor.MiddleCenter, new Vector2(.1f, .62f), new Vector2(.9f, .77f),
             Vector2.zero, Vector2.zero, FontStyle.Bold);
@@ -237,7 +269,7 @@ internal static class EndlessHuntGameSceneBuilder
         Image dim = EndlessHuntSceneFactory.Image("Exit Confirmation (Prepared)", parent,
             EndlessHuntSceneFactory.Ui("Modals/darkModalSimple_dark.png"), Vector2.zero, Vector2.one,
             Vector2.zero, Vector2.zero, Color.white, true);
-        game.exitConfirmPanel = dim.gameObject;
+        game.exitConfirmPanel = dim.gameObject; dim.gameObject.AddComponent<PopupMotion>();
         Image modal = EndlessHuntSceneFactory.Image("Vector UI Confirmation Card", dim.transform,
             EndlessHuntSceneFactory.Ui("Modals/modalSimple_v1.png"), new Vector2(.12f, .31f), new Vector2(.88f, .69f),
             Vector2.zero, Vector2.zero, Color.white, true);
@@ -260,7 +292,7 @@ internal static class EndlessHuntGameSceneBuilder
         Image panel = EndlessHuntSceneFactory.Image("Game Over Panel (Prepared)", parent,
             EndlessHuntSceneFactory.Ui("Modals/modalCastle.png"), Vector2.zero, Vector2.one,
             Vector2.zero, Vector2.zero, Color.white, true);
-        game.gameOverPanel = panel.gameObject;
+        game.gameOverPanel = panel.gameObject; panel.gameObject.AddComponent<PopupMotion>();
         game.gameOverText = EndlessHuntSceneFactory.Text("Results", panel.transform, "AV SONA ERDİ", 42,
             Color.white, TextAnchor.UpperCenter, new Vector2(.08f, .4f), new Vector2(.92f, .8f),
             Vector2.zero, Vector2.zero, FontStyle.Bold);

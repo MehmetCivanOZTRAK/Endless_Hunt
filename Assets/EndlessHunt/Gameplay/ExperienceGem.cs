@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 namespace EndlessHunt
 {
@@ -12,14 +13,19 @@ namespace EndlessHunt
         public void Activate(Vector3 position, int amount)
         {
             transform.position = position; _amount = amount;
-            spriteRenderer.color = amount > 1 ? new Color(.75f, .3f, 1f) : new Color(.2f, .9f, 1f);
-            transform.localScale = Vector3.one * (amount > 1 ? .42f : .3f);
+            spriteRenderer.color = Color.white;
+            spriteRenderer.sortingOrder=6;
+            float height=spriteRenderer.sprite?spriteRenderer.sprite.bounds.size.y:1;
+            transform.localScale = Vector3.one * ((amount>1?.46f:.34f)/Mathf.Max(.01f,height));
             gameObject.SetActive(true);
+            transform.DOKill();var target=transform.localScale;transform.localScale=target*.6f;transform.DOScale(target,.18f).SetEase(Ease.OutBack);
         }
+        public void Accumulate(int amount) => _amount+=Mathf.Max(0,amount);
+        private void OnDisable()=>transform.DOKill();
 
         private void Update()
         {
-            if (_game == null || _game.Player == null) return;
+            if (_game == null || _game.Player == null || Time.timeScale==0) return;
             float distance = Vector2.Distance(transform.position, _game.Player.transform.position);
             if (distance < _game.PickupRadius)
                 transform.position = Vector3.MoveTowards(transform.position, _game.Player.transform.position,

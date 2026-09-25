@@ -12,6 +12,8 @@ namespace EndlessHunt
         private float _hitClock;
         private bool _hitPending;
         private float _speedMultiplier = 1f;
+        private float _rangeMultiplier = 1f;
+        public void MultiplyRange(float value) => _rangeMultiplier *= value;
 
         public void Setup(SurvivalGame game, SurvivalPlayer player, WeaponDefinition weapon)
         {
@@ -23,7 +25,7 @@ namespace EndlessHunt
 
         private void Update()
         {
-            if (_game == null || _weapon == null || _player.IsDead) return;
+            if (_game == null || _weapon == null || _player.IsDead || Time.timeScale == 0f) return;
             _cooldown -= Time.deltaTime;
             if (_hitPending)
             {
@@ -32,18 +34,21 @@ namespace EndlessHunt
                 {
                     _hitPending = false;
                     if (_target != null && _target.gameObject.activeSelf &&
-                        Vector2.Distance(transform.position, _target.transform.position) <= _weapon.attackRange * 1.25f)
+                        Vector2.Distance(transform.position, _target.transform.position) <= _weapon.attackRange * _rangeMultiplier * 1.25f)
+                    {
                         _target.Hit(_game.Damage);
+                        _game.ShowImpact(_target.transform.position, _game.Damage);
+                    }
                 }
             }
             if (_cooldown > 0f || _hitPending) return;
             _target = FindNearest();
             if (_target == null) return;
             Vector2 direction = _target.transform.position - transform.position;
-            if (direction.sqrMagnitude > _weapon.attackRange * _weapon.attackRange) return;
+            if (direction.sqrMagnitude > Mathf.Pow(_weapon.attackRange * _rangeMultiplier, 2f)) return;
             _player.Face(direction.x);
             float duration = Mathf.Max(.25f, _weapon.attackCooldown / _speedMultiplier);
-            _player.PlayAttack(_weapon.attackAnimation, duration);
+            if (!_player.PlayAttack(_weapon.attackAnimation, duration)) return;
             _hitClock = duration * _weapon.hitMoment;
             _hitPending = true;
             _cooldown = duration;

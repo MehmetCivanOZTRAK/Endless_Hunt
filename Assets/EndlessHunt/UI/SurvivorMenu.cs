@@ -4,6 +4,7 @@ using Spine.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace EndlessHunt
 {
@@ -28,10 +29,19 @@ namespace EndlessHunt
         [Header("Five Button Navigation")]
         public Button homeTab, equipmentTab, upgradeTab, storeTab, arsenalTab;
         public Image[] tabHighlights;
+        [Tooltip("Pressed child images, in Shop / Equipment / Battle / Upgrades / Arsenal order.")]
+        public Image[] tabPressedVisuals;
+        [Min(0)] public float navigationDuration = .22f;
 
         [Header("Battle Home")]
         public Text stageTitle, bestScoreText;
         public Button previousStageButton, nextStageButton, playButton;
+        public Image stageArt;
+        public Sprite[] stageSprites;
+        public GameObject stageLock;
+        public Text stageProgress;
+        private EndlessHunt.UI.AuthoredBottomNavigation _navigation;
+        private int _currentPage = -1, _currentNavigation = -1;
 
         [Header("Survivor Style Equipment")]
         public Image[] equippedSlotIcons;
@@ -40,6 +50,7 @@ namespace EndlessHunt
         public Text attackText, healthText;
         public GearCardView[] equipmentCards;
         public WeaponCardView[] inventoryWeaponCards;
+        public Button[] inventoryFilters;
 
         [Header("Weapon Store")]
         public WeaponCardView[] weaponCards;
@@ -63,17 +74,26 @@ namespace EndlessHunt
         private Coroutine _toastRoutine;
         private int _selectedWeapon;
         private WeaponDefinition _pendingPurchase;
+        public event Action<int,int> PageChanged;
+        public void Navigate(int page,int navigationIndex)=>ShowPage(page,navigationIndex);
+        public void RefreshProfile()=>RefreshTopBar();
 
         private void Start()
         {
-            homeTab.onClick.AddListener(() => ShowPage(0, 2));
-            equipmentTab.onClick.AddListener(() => ShowPage(1, 1));
-            upgradeTab.onClick.AddListener(() => ShowPage(2, 3));
-            storeTab.onClick.AddListener(() => ShowPage(3, 0));
-            arsenalTab.onClick.AddListener(() => ShowPage(3, 4));
+            Button[] tabs = { storeTab, equipmentTab, homeTab, upgradeTab, arsenalTab };
+            Canvas.ForceUpdateCanvases();
+            _navigation = new EndlessHunt.UI.AuthoredBottomNavigation(tabs, tabPressedVisuals, navigationDuration);
+            if (homeTab) homeTab.onClick.AddListener(() => ShowPage(0, 2));
+            if (equipmentTab) equipmentTab.onClick.AddListener(() => ShowPage(1, 1));
+            if (upgradeTab) upgradeTab.onClick.AddListener(() => ShowPage(2, 3));
+            if (storeTab) storeTab.onClick.AddListener(() => ShowPage(3, 0));
+            if (arsenalTab) arsenalTab.onClick.AddListener(() => ShowPage(3, 4));
             previousStageButton.onClick.AddListener(() => CycleStage(-1));
             nextStageButton.onClick.AddListener(() => CycleStage(1));
             playButton.onClick.AddListener(StartGame);
+            if (inventoryFilters != null)
+                for (int i = 0; i < inventoryFilters.Length; i++) { int category = i; inventoryFilters[i].onClick.AddListener(() => FilterInventory(category)); }
+            FilterInventory(0);
 
             for (int i = 0; i < equipmentCards.Length && i < GameCatalog.Gear.Length; i++)
             {
@@ -120,8 +140,8 @@ namespace EndlessHunt
             gemText.text = GameProfile.Gems.ToString("N0");
             energyText.text = GameProfile.Energy + "/" + GameProfile.MaxEnergy;
             energyTimerText.text = GameProfile.EnergyTimer();
-            playerNameText.text = "Player " + (69252009 + GameProfile.BestScore);
-            playerLevelText.text = "LV." + Mathf.Max(1, PlayerPrefs.GetInt("EH_PlayerLevel", 20));
+            playerNameText.text = LocalPlayerStore.Current.name;
+            playerLevelText.text = "LV." + Mathf.Max(1, PlayerPrefs.GetInt("EH_PlayerLevel", 1));
         }
 
         private IEnumerator RefreshEnergyDisplay()
@@ -137,15 +157,27 @@ namespace EndlessHunt
 
         private void ShowPage(int page, int navigationIndex)
         {
+            if (_currentPage == page && _currentNavigation == navigationIndex) return;
+            bool animate = _currentPage >= 0;
+            _currentPage = page;
+            _currentNavigation = navigationIndex;
             homePage.SetActive(page == 0);
             equipmentPage.SetActive(page == 1);
             upgradePage.SetActive(page == 2);
             storePage.SetActive(page == 3);
-            for (int i = 0; i < tabHighlights.Length; i++) tabHighlights[i].enabled = i == navigationIndex;
+            _navigation?.Select(navigationIndex, animate);
+            GameObject active = page == 0 ? homePage : page == 1 ? equipmentPage : page == 2 ? upgradePage : storePage;
+            CanvasGroup group = active.GetComponent<CanvasGroup>();
+            if (group != null)
+            {
+                group.DOKill(); group.alpha = animate ? .3f : 1f;
+                if (animate) group.DOFade(1f, .18f).SetUpdate(true);
+            }
             if (page == 0) RefreshHome();
             else if (page == 1) RefreshEquipment();
             else if (page == 2) RefreshUpgrades();
             else RefreshWeapons();
+            PageChanged?.Invoke(page,navigationIndex);
         }
 
         private void RefreshCharacters()
@@ -167,17 +199,30 @@ namespace EndlessHunt
             int selected = GameProfile.SelectedStage;
             stageTitle.text = $"{selected + 1}. {GameCatalog.MapNames[selected]}";
             bestScoreText.text = "EN İYİ SKOR:  " + GameProfile.BestScore.ToString("N0");
+            bool unlocked = selected < GameProfile.HighestStage;
+            playButton.interactable = unlocked;
+            playButton.GetComponentInChildren<Text>().text = unlocked ? "BAŞLA\n5 ENERJİ" : "KİLİTLİ";
+            if (stageLock != null) stageLock.SetActive(!unlocked);
+            if (stageArt != null && stageSprites != null && stageSprites.Length > selected)
+            {
+                stageArt.sprite = stageSprites[selected];
+                stageArt.color = unlocked ? Color.white : new Color(.42f, .46f, .52f);
+            }
+            if (stageProgress != null) stageProgress.text = (selected + 1) + " / " + GameCatalog.MapNames.Length + "  •  KAYDIRARAK SEÇ";
+            previousStageButton.interactable = selected > 0;
+            nextStageButton.interactable = selected < GameCatalog.MapNames.Length - 1;
         }
 
-        private void CycleStage(int delta)
+        public void CycleStage(int delta)
         {
-            int max = Mathf.Min(GameProfile.HighestStage, GameCatalog.MapNames.Length);
-            GameProfile.SelectedStage = (GameProfile.SelectedStage + delta + max) % max;
+            GameProfile.SelectedStage = Mathf.Clamp(GameProfile.SelectedStage + delta, 0, GameCatalog.MapNames.Length - 1);
             RefreshHome();
+            if (stageArt != null) { stageArt.transform.DOKill(); stageArt.transform.localScale = Vector3.one * .94f; stageArt.transform.DOScale(1f, .22f).SetEase(Ease.OutCubic).SetUpdate(true); }
         }
 
         private void StartGame()
         {
+            if (GameProfile.SelectedStage >= GameProfile.HighestStage) return;
             if (!GameProfile.SpendEnergy(GameProfile.BattleEnergyCost)) { FlashMessage("YETERLİ ENERJİ YOK"); return; }
             SceneManager.LoadScene("GameScene");
         }
@@ -195,13 +240,12 @@ namespace EndlessHunt
             {
                 GearDefinition gear = GameProfile.FindEquipped(slots[i]);
                 equippedSlotIcons[i + 1].sprite = GearIcon(gear);
-                equippedSlotLevels[i + 1].text = "LV." + PlayerPrefs.GetInt("EH_GearLevel_" + (gear?.id ?? "none"), 1);
+                equippedSlotIcons[i + 1].enabled = gear != null && !string.IsNullOrEmpty(gear.spineSkin);
+                equippedSlotLevels[i + 1].text = gear == null || string.IsNullOrEmpty(gear.spineSkin) ? "BOŞ" : "LV.1";
             }
             float attack = weapon != null ? weapon.DamageAtLevel(weaponLevel) : 18f;
-            int powerLevel = PlayerPrefs.GetInt("EH2_Upgrade_1", 1);
-            int healthLevel = PlayerPrefs.GetInt("EH2_Upgrade_0", 1);
-            attackText.text = "ATK   " + Mathf.RoundToInt(attack * (1f + (powerLevel - 1) * .05f));
-            healthText.text = "HP   " + Mathf.RoundToInt(100f * (1f + (healthLevel - 1) * .05f));
+            attackText.text = "ATK   " + Mathf.RoundToInt(attack * (1f + LocalPlayerStore.Talent(1) * .04f));
+            healthText.text = "HP   " + Mathf.RoundToInt(100f + GameProfile.GearHealthBonus + LocalPlayerStore.Talent(0)*10);
         }
 
         private void RefreshGearCards()
@@ -212,7 +256,7 @@ namespace EndlessHunt
                 bool owns = GameProfile.Owns(gear.id);
                 bool equipped = GameProfile.Equipped(gear.slot) == gear.id;
                 equipmentCards[i].selectedFrame.enabled = equipped;
-                equipmentCards[i].status.text = owns ? (equipped ? "LV.1" : "GİY") : gear.price + "♦";
+                equipmentCards[i].status.text = owns ? (equipped ? "TAKILI" : "GİY") : gear.price + "♦";
                 equipmentCards[i].icon.color = owns ? Color.white : new Color(.42f,.45f,.55f,1f);
             }
         }
@@ -231,8 +275,34 @@ namespace EndlessHunt
             }
         }
 
+        public void FilterInventory(int category)
+        {
+            int count = 0;
+            RectTransform content = inventoryWeaponCards[0].button.transform.parent as RectTransform;
+            foreach (WeaponCardView card in inventoryWeaponCards) PlaceInventoryItem(card.button, category <= 1, ref count);
+            GearSlot[] slots = { GearSlot.Top, GearSlot.Bottom, GearSlot.Helmet, GearSlot.Hair, GearSlot.Boots };
+            for (int i = 0; i < equipmentCards.Length; i++)
+                PlaceInventoryItem(equipmentCards[i].button, category == 0 || (category >= 2 && GameCatalog.Gear[i].slot == slots[category - 2]), ref count);
+            content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Mathf.Ceil(count / 5f) * 204f + 24f);
+            content.GetComponentInParent<ScrollRect>(true).verticalNormalizedPosition = 1f;
+            if (inventoryFilters != null)
+                for (int i = 0; i < inventoryFilters.Length; i++) inventoryFilters[i].GetComponent<Image>().color = i == category ? new Color(1f,.78f,.2f) : Color.white;
+        }
+
+        private static void PlaceInventoryItem(Button button, bool visible, ref int index)
+        {
+            button.gameObject.SetActive(visible);
+            if (!visible) return;
+            RectTransform rect = (RectTransform)button.transform;
+            int column = index % 5, row = index / 5;
+            rect.anchorMin = new Vector2(column * .2f, 1f); rect.anchorMax = new Vector2((column + 1) * .2f, 1f);
+            rect.offsetMin = new Vector2(8f, -12f - row * 204f - 188f); rect.offsetMax = new Vector2(-8f, -12f - row * 204f);
+            index++;
+        }
+
         private void SelectGear(GearDefinition gear)
         {
+            if (GameProfile.Equipped(gear.slot) == gear.id) { GameProfile.Unequip(gear.slot); RefreshCharacters(); RefreshEquipment(); FlashMessage(gear.title + " ÇIKARILDI"); return; }
             if (!GameProfile.Buy(gear)) { FlashMessage("YETERLİ ELMAS YOK"); return; }
             RefreshCharacters(); RefreshEquipment(); RefreshTopBar(); FlashMessage(gear.title + " GİYİLDİ");
         }
@@ -254,7 +324,11 @@ namespace EndlessHunt
         private void EquippedSlotPressed(int index)
         {
             if (index == 0) ShowPage(3, 4);
-            else FlashMessage("Aşağıdaki envanterden yeni ekipman seçebilirsin");
+            else
+            {
+                GearSlot[] slots = { GearSlot.Top, GearSlot.Helmet, GearSlot.Bottom, GearSlot.Hair, GearSlot.Boots };
+                GameProfile.Unequip(slots[index - 1]); RefreshCharacters(); RefreshEquipment();
+            }
         }
 
         private void SelectStoreWeapon(int index) { _selectedWeapon = Mathf.Clamp(index, 0, weapons.Length - 1); RefreshWeapons(); }
@@ -357,6 +431,16 @@ namespace EndlessHunt
             toastText.text = message; toastPanel.SetActive(true);
             yield return new WaitForSecondsRealtime(1.4f);
             toastPanel.SetActive(false);
+        }
+
+        private void LateUpdate() => _navigation?.RefreshDimensions();
+
+        private void OnDestroy()
+        {
+            _navigation?.Dispose();
+            foreach (GameObject page in new[] { homePage, equipmentPage, upgradePage, storePage })
+                if (page != null && page.TryGetComponent<CanvasGroup>(out var group)) group.DOKill();
+            if (stageArt != null) stageArt.transform.DOKill();
         }
     }
 }

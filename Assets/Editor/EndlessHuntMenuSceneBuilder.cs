@@ -1,4 +1,5 @@
 using EndlessHunt;
+using EndlessHunt.UI;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,9 +24,10 @@ internal static class EndlessHuntMenuSceneBuilder
         RectTransform safe = EndlessHuntSceneFactory.Rect("Mobile Safe Area", root.transform,
             Vector2.zero, Vector2.one, new Vector2(0f,24f), new Vector2(0f,-22f));
 
+        safe.gameObject.AddComponent<SafeAreaController>();
         BuildPlayerBar(menu, safe);
         RectTransform pages = EndlessHuntSceneFactory.Rect("Screens (Rebuilt From Zero)", safe,
-            new Vector2(0f,.105f), new Vector2(1f,.93f), Vector2.zero, Vector2.zero);
+            Vector2.zero, Vector2.one, new Vector2(0f, 160f), new Vector2(0f, -120f));
         menu.homePage = BuildBattle(menu, pages, startPrefab);
         menu.equipmentPage = BuildEquipment(menu, pages, startPrefab, weapons);
         menu.upgradePage = BuildUpgrade(menu, pages);
@@ -33,14 +35,15 @@ internal static class EndlessHuntMenuSceneBuilder
         BuildNavigation(menu, safe);
         BuildConfirmation(menu, safe);
         BuildToast(menu, safe);
+        menu.confirmationPanel.AddComponent<PopupMotion>();
         EndlessHuntSceneFactory.EventSystem();
     }
 
     private static void BuildPlayerBar(SurvivorMenu menu, Transform parent)
     {
         Image bar = EndlessHuntSceneFactory.Image("Player And Resources Bar", parent,
-            EndlessHuntSceneFactory.Ui("Modals/topBarEmpty.png"), new Vector2(0f,.93f), Vector2.one,
-            Vector2.zero, Vector2.zero, new Color(.09f,.1f,.15f,1f));
+            EndlessHuntSceneFactory.Ui("Modals/topBarEmpty.png"), new Vector2(0f,1f), Vector2.one,
+            new Vector2(0f,-120f), Vector2.zero, Color.white);
         Image profile = EndlessHuntSceneFactory.Image("Player Profile", bar.transform,
             EndlessHuntSceneFactory.Ui("Cards/cardShop_yellow.png"), new Vector2(.005f,.06f), new Vector2(.35f,.95f),
             Vector2.zero, Vector2.zero, Color.white);
@@ -48,9 +51,9 @@ internal static class EndlessHuntMenuSceneBuilder
             EndlessHuntSceneFactory.Ui("Icons/128px/adventure_icon_128px.png"), new Vector2(.01f,.05f), new Vector2(.28f,.95f),
             new Vector2(4f,4f), new Vector2(-4f,-4f), Color.white);
         avatar.preserveAspect = true;
-        menu.playerNameText = EndlessHuntSceneFactory.Text("Player Name", profile.transform,"Player 69252009",27,
+        menu.playerNameText = EndlessHuntSceneFactory.Text("Player Name", profile.transform,"AVCI",27,
             Color.white,TextAnchor.MiddleLeft,new Vector2(.29f,.42f),new Vector2(.98f,.94f),Vector2.zero,Vector2.zero,FontStyle.Bold);
-        menu.playerLevelText = EndlessHuntSceneFactory.Text("Player Level", profile.transform,"LV.20",21,
+        menu.playerLevelText = EndlessHuntSceneFactory.Text("Player Level", profile.transform,"LV.1",21,
             new Color(1f,.9f,.25f),TextAnchor.MiddleLeft,new Vector2(.29f,.05f),new Vector2(.49f,.42f),Vector2.zero,Vector2.zero,FontStyle.Bold);
         EndlessHuntSceneFactory.Bar("Player Experience",profile.transform,
             EndlessHuntSceneFactory.Ui("ProgressBars/progressBarBase_black.png"),
@@ -80,42 +83,38 @@ internal static class EndlessHuntMenuSceneBuilder
 
     private static GameObject BuildBattle(SurvivorMenu menu, Transform parent, GameObject startPrefab)
     {
-        Image page = Page("Battle Screen",parent,Orange);
-        IconButton("Settings",page.transform,"Icons/128px/settings_icon_128px.png",new Vector2(.02f,.87f),new Vector2(.12f,.98f));
-        IconButton("Mail",page.transform,"Icons/128px/mail_icon_128px.png",new Vector2(.88f,.87f),new Vector2(.98f,.98f));
+        Image page = Page("Battle Screen", parent, new Color(1f,.68f,.24f));
+        Header(page.transform, "ENDLESS HUNT", new Vector2(.12f,.88f), new Vector2(.88f,.98f));
         menu.stageTitle = EndlessHuntSceneFactory.Text("Stage Name",page.transform,"1. YEŞİL KAMP",48,Color.white,
-            TextAnchor.MiddleCenter,new Vector2(.08f,.79f),new Vector2(.92f,.9f),Vector2.zero,Vector2.zero,FontStyle.Bold);
-        menu.bestScoreText = EndlessHuntSceneFactory.Text("Longest Survived",page.transform,"En Uzun Hayatta Kalma: 00m 00s",23,
-            Color.white,TextAnchor.MiddleCenter,new Vector2(.1f,.755f),new Vector2(.9f,.81f),Vector2.zero,Vector2.zero,FontStyle.Bold);
-
-        Image stage = EndlessHuntSceneFactory.Image("Stage Preview",page.transform,
-            EndlessHuntSceneFactory.Ui("Containers/cardContainer_black.png"),new Vector2(.19f,.39f),new Vector2(.81f,.75f),
-            Vector2.zero,Vector2.zero,Color.white);
-        Image map = EndlessHuntSceneFactory.Image("LayerLab Stage Art",stage.transform,
-            EndlessHuntSceneFactory.Sprite("Assets/Layer Lab/2D Art Maker/AMCasual Character/Demo/Map/background.png"),
-            new Vector2(.03f,.03f),new Vector2(.97f,.97f),Vector2.zero,Vector2.zero,new Color(.65f,.8f,.55f,1f));
-        map.type=Image.Type.Simple;
+            TextAnchor.MiddleCenter,new Vector2(.06f,.77f),new Vector2(.94f,.87f),Vector2.zero,Vector2.zero,FontStyle.Bold);
+        menu.bestScoreText = EndlessHuntSceneFactory.Text("Best Score",page.transform,"EN İYİ SKOR: 0",25,
+            Color.white,TextAnchor.MiddleCenter,new Vector2(.1f,.715f),new Vector2(.9f,.77f),Vector2.zero,Vector2.zero,FontStyle.Bold);
+        Image stage = EndlessHuntSceneFactory.Image("Swipe Stage Card",page.transform,
+            EndlessHuntSceneFactory.Ui("Buttons/buttonSquare_black.png"),new Vector2(.18f,.31f),new Vector2(.82f,.70f),
+            Vector2.zero,Vector2.zero,Color.white,true);
+        stage.gameObject.AddComponent<StageSwipe>().menu = menu;
+        menu.stageSprites = new Sprite[5];
+        string[] art = {"tent.png", "building2.png", "car1.png", "tree3.png", "campfire.png"};
+        for(int i=0;i<5;i++) menu.stageSprites[i] = EndlessHuntSceneFactory.Sprite("Assets/Layer Lab/2D Art Maker/AMCasual Character/Demo/Map/"+art[i]);
+        EndlessHuntSceneFactory.Image("Map Ground",stage.transform,EndlessHuntSceneFactory.Ui("Buttons/buttonSquare_green.png"),new Vector2(.04f,.05f),new Vector2(.96f,.95f),Vector2.zero,Vector2.zero,new Color(.32f,.5f,.3f));
+        menu.stageArt = EndlessHuntSceneFactory.Image("Stage Landmark",stage.transform,menu.stageSprites[0],
+            new Vector2(.08f,.19f),new Vector2(.92f,.9f),Vector2.zero,Vector2.zero,Color.white);
+        menu.stageArt.preserveAspect = true;
         menu.battlePreview = EndlessHuntSceneFactory.SpineGraphic(startPrefab,"Battle Character Preview",stage.transform,
-            new Vector2(.27f,.04f),new Vector2(.73f,.74f),Vector2.zero,Vector2.zero,2.15f);
-        EndlessHuntSceneFactory.Text("Stage Number",stage.transform,(GameProfile.SelectedStage+1).ToString(),34,
-            new Color(.16f,.12f,.2f),TextAnchor.MiddleCenter,new Vector2(.43f,.81f),new Vector2(.57f,.96f),Vector2.zero,Vector2.zero,FontStyle.Bold);
-
-        Image chest = EndlessHuntSceneFactory.Image("Chapter Chest",page.transform,
-            EndlessHuntSceneFactory.Ui("Icons/256px/chestRuby_icon_256px.png"),new Vector2(.42f,.28f),new Vector2(.58f,.39f),Vector2.zero,Vector2.zero,Color.white);
-        chest.preserveAspect=true;
-        EndlessHuntSceneFactory.Text("Chest Label",page.transform,"Bölüm Sandığı",20,Color.white,TextAnchor.MiddleCenter,
-            new Vector2(.34f,.245f),new Vector2(.66f,.29f),Vector2.zero,Vector2.zero,FontStyle.Bold);
+            new Vector2(.5f,.12f),new Vector2(.8f,.55f),Vector2.zero,Vector2.zero,1.5f);
+        Image locked = EndlessHuntSceneFactory.Image("Locked Stage",stage.transform,null,Vector2.zero,Vector2.one,Vector2.zero,Vector2.zero,new Color(.05f,.07f,.12f,.76f));
+        menu.stageLock = locked.gameObject;
+        EndlessHuntSceneFactory.Image("Lock Icon",locked.transform,EndlessHuntSceneFactory.Ui("Icons/128px/key_icon_128px.png"),new Vector2(.35f,.5f),new Vector2(.65f,.8f),Vector2.zero,Vector2.zero,Color.white).preserveAspect=true;
+        EndlessHuntSceneFactory.Text("Unlock Requirement",locked.transform,"KİLİTLİ\nÖnceki bölümde 3 dakika hayatta kal",30,Color.white,TextAnchor.MiddleCenter,new Vector2(.08f,.12f),new Vector2(.92f,.5f),Vector2.zero,Vector2.zero,FontStyle.Bold);
+        locked.gameObject.SetActive(false);
+        menu.stageProgress = EndlessHuntSceneFactory.Text("Stage Pagination",page.transform,"1 / 5  •  KAYDIRARAK SEÇ",24,Ink,TextAnchor.MiddleCenter,new Vector2(.1f,.235f),new Vector2(.9f,.29f),Vector2.zero,Vector2.zero,FontStyle.Bold);
         menu.playButton = EndlessHuntSceneFactory.Button("Start Battle",page.transform,
-            EndlessHuntSceneFactory.Ui("Buttons/buttonAdvanced_yellow.png"),"BAŞLA\n⚡ 5",32,
-            new Vector2(.31f,.105f),new Vector2(.69f,.225f),Vector2.zero,Vector2.zero);
-        Button patrol = IconButton("Patrol",page.transform,"Icons/128px/adventure_icon_128px.png",new Vector2(.03f,.08f),new Vector2(.22f,.22f));
-        EndlessHuntSceneFactory.Text("Label",patrol.transform,"DEVRİYE",19,Color.white,TextAnchor.LowerCenter,Vector2.zero,Vector2.one,Vector2.zero,new Vector2(0f,-4f),FontStyle.Bold);
-        Button daily = IconButton("Daily Event",page.transform,"Icons/128px/store_icon_128px.png",new Vector2(.78f,.08f),new Vector2(.97f,.22f));
-        EndlessHuntSceneFactory.Text("Label",daily.transform,"GÜNLÜK ETKİNLİK",18,Color.white,TextAnchor.LowerCenter,Vector2.zero,Vector2.one,Vector2.zero,new Vector2(0f,-4f),FontStyle.Bold);
+            EndlessHuntSceneFactory.Ui("Buttons/buttonAdvanced_yellow.png"),"BAŞLA\n5 ENERJİ",42,
+            new Vector2(.23f,.065f),new Vector2(.77f,.205f),Vector2.zero,Vector2.zero);
         menu.previousStageButton = EndlessHuntSceneFactory.Button("Previous Stage",page.transform,
-            EndlessHuntSceneFactory.Ui("Buttons/buttonSquare_blue.png"),"‹",42,new Vector2(.08f,.51f),new Vector2(.18f,.62f),Vector2.zero,Vector2.zero);
+            EndlessHuntSceneFactory.Ui("Buttons/buttonSquare_blue.png"),"‹",52,new Vector2(.035f,.45f),new Vector2(.155f,.55f),Vector2.zero,Vector2.zero);
         menu.nextStageButton = EndlessHuntSceneFactory.Button("Next Stage",page.transform,
-            EndlessHuntSceneFactory.Ui("Buttons/buttonSquare_blue.png"),"›",42,new Vector2(.82f,.51f),new Vector2(.92f,.62f),Vector2.zero,Vector2.zero);
+            EndlessHuntSceneFactory.Ui("Buttons/buttonSquare_blue.png"),"›",52,new Vector2(.845f,.45f),new Vector2(.965f,.55f),Vector2.zero,Vector2.zero);
         return page.gameObject;
     }
 
@@ -123,10 +122,8 @@ internal static class EndlessHuntMenuSceneBuilder
     {
         Image page = Page("Equipment Screen",parent,Orange);
         Image upper = EndlessHuntSceneFactory.Image("Equipped Hero Area",page.transform,
-            EndlessHuntSceneFactory.Ui("Panels/panel_yellow.png"),new Vector2(0f,.43f),Vector2.one,
+            null,new Vector2(0f,.49f),Vector2.one,
             Vector2.zero,Vector2.zero,new Color(1f,.66f,.2f,1f));
-        EndlessHuntSceneFactory.Image("Halftone Overlay",upper.transform,
-            EndlessHuntSceneFactory.Ui("Effects/effect_yellow.png"),Vector2.zero,Vector2.one,Vector2.zero,Vector2.zero,new Color(1f,1f,1f,.2f));
         menu.equipmentPreview = EndlessHuntSceneFactory.SpineGraphic(startPrefab,"Equipment Live Character",upper.transform,
             new Vector2(.29f,.13f),new Vector2(.71f,.76f),Vector2.zero,Vector2.zero,2.05f);
 
@@ -141,24 +138,20 @@ internal static class EndlessHuntMenuSceneBuilder
             EquippedSlot(upper.transform,i,initial,mins[i],maxs[i],i%2==0,
                 out menu.equippedSlotButtons[i],out menu.equippedSlotIcons[i],out menu.equippedSlotLevels[i]);
         }
-        Image tech = EndlessHuntSceneFactory.Image("Tech Parts",upper.transform,
-            EndlessHuntSceneFactory.Ui("Icons/128px/skills_icon_128px.png"),new Vector2(.44f,.86f),new Vector2(.56f,.98f),Vector2.zero,Vector2.zero,Color.white);
-        tech.preserveAspect=true;
-        EndlessHuntSceneFactory.Text("Tech Label",upper.transform,"TEKNOLOJİ",18,Color.white,TextAnchor.MiddleCenter,
-            new Vector2(.38f,.81f),new Vector2(.62f,.87f),Vector2.zero,Vector2.zero,FontStyle.Bold);
         menu.attackText = StatLabel(upper.transform,"Attack","Icons/128px/sword_icon_128px.png","ATK  19",new Vector2(.02f,.02f),new Vector2(.39f,.14f));
         menu.healthText = StatLabel(upper.transform,"Health","Icons/128px/armor_icon_128px.png","HP  100",new Vector2(.61f,.02f),new Vector2(.98f,.14f));
 
         Image titleBand = EndlessHuntSceneFactory.Image("My Equipment Header",page.transform,
-            EndlessHuntSceneFactory.Ui("Headers/header_black.png"),new Vector2(0f,.36f),new Vector2(1f,.44f),Vector2.zero,Vector2.zero,Color.white);
-        EndlessHuntSceneFactory.Button("Quality Filter",titleBand.transform,
-            EndlessHuntSceneFactory.Ui("Buttons/buttonAdvanced_yellow.png"),"KALİTE",22,new Vector2(.025f,.12f),new Vector2(.25f,.88f),Vector2.zero,Vector2.zero);
-        EndlessHuntSceneFactory.Text("Title",titleBand.transform,"EKİPMANLARIM",35,Color.white,TextAnchor.MiddleCenter,
-            new Vector2(.25f,0f),new Vector2(.75f,1f),Vector2.zero,Vector2.zero,FontStyle.Bold);
-        EndlessHuntSceneFactory.Button("Merge",titleBand.transform,
-            EndlessHuntSceneFactory.Ui("Buttons/buttonAdvanced_yellow.png"),"BİRLEŞTİR",21,new Vector2(.75f,.12f),new Vector2(.975f,.88f),Vector2.zero,Vector2.zero);
+            EndlessHuntSceneFactory.Ui("Headers/header_black.png"),new Vector2(0f,.36f),new Vector2(1f,.49f),Vector2.zero,Vector2.zero,Color.white);
+        EndlessHuntSceneFactory.Text("Title",titleBand.transform,"EKİPMANLAR • DOKUN VE KUŞAN",30,Color.white,TextAnchor.MiddleCenter,
+            new Vector2(.02f,.61f),new Vector2(.98f,1f),Vector2.zero,Vector2.zero,FontStyle.Bold);
 
-        RectTransform content = BuildInventoryScroll(page.transform,"Five Column Equipment Inventory",new Vector2(0f,0f),new Vector2(1f,.36f),2050f);
+        string[] categories = { "TÜMÜ", "SİLAH", "ÜST", "ALT", "BAŞ", "SAÇ", "BOT" };
+        menu.inventoryFilters = new Button[categories.Length];
+        for(int i=0;i<categories.Length;i++) menu.inventoryFilters[i] = EndlessHuntSceneFactory.Button("Filter "+categories[i],titleBand.transform,
+            EndlessHuntSceneFactory.Ui("Buttons/button_black.png"),categories[i],26,new Vector2(i/7f,.02f),new Vector2((i+1)/7f,.58f),new Vector2(2f,0f),new Vector2(-2f,0f));
+
+        RectTransform content = BuildInventoryScroll(page.transform,"Five Column Equipment Inventory",new Vector2(0f,0f),new Vector2(1f,.36f),Mathf.Ceil((weapons.Length + GameCatalog.Gear.Length) / 5f) * 204f + 24f);
         menu.inventoryWeaponCards = new WeaponCardView[weapons.Length];
         for(int i=0;i<weapons.Length;i++) menu.inventoryWeaponCards[i]=InventoryWeaponCard(content,weapons[i],i);
         menu.equipmentCards = new GearCardView[GameCatalog.Gear.Length];
@@ -176,7 +169,7 @@ internal static class EndlessHuntMenuSceneBuilder
         button=card.gameObject.AddComponent<Button>(); button.targetGraphic=card; button.navigation=new Navigation{mode=Navigation.Mode.None};
         icon=EndlessHuntSceneFactory.Image("Equipped Icon",card.transform,sprite,new Vector2(.12f,.12f),new Vector2(.88f,.82f),Vector2.zero,Vector2.zero,Color.white); icon.preserveAspect=true;
         level=EndlessHuntSceneFactory.Text("Level",card.transform,"LV.1",24,Color.white,TextAnchor.UpperCenter,new Vector2(.03f,.7f),new Vector2(.97f,.98f),Vector2.zero,Vector2.zero,FontStyle.Bold);
-        Image arrow=EndlessHuntSceneFactory.Image("Upgrade Arrow",card.transform,EndlessHuntSceneFactory.Ui("Arrows/arrow_green.png"),new Vector2(.68f,.02f),new Vector2(.98f,.34f),Vector2.zero,Vector2.zero,Color.white); arrow.preserveAspect=true;
+        Image arrow=EndlessHuntSceneFactory.Image("Slot Marker",card.transform,EndlessHuntSceneFactory.Ui("Icons/128px/tickV1_icon_128px.png"),new Vector2(.68f,.02f),new Vector2(.98f,.34f),Vector2.zero,Vector2.zero,Color.white); arrow.preserveAspect=true; arrow.gameObject.SetActive(false);
     }
 
     private static Text StatLabel(Transform parent,string name,string iconPath,string value,Vector2 min,Vector2 max)
@@ -189,7 +182,7 @@ internal static class EndlessHuntMenuSceneBuilder
     private static RectTransform BuildInventoryScroll(Transform parent,string name,Vector2 min,Vector2 max,float height)
     {
         Image viewport=EndlessHuntSceneFactory.Image(name,parent,null,min,max,Vector2.zero,Vector2.zero,new Color(.1f,.11f,.16f,1f),true);
-        Mask mask=viewport.gameObject.AddComponent<Mask>(); mask.showMaskGraphic=true;
+        viewport.gameObject.AddComponent<RectMask2D>();
         ScrollRect scroll=viewport.gameObject.AddComponent<ScrollRect>(); scroll.horizontal=false; scroll.vertical=true; scroll.movementType=ScrollRect.MovementType.Elastic; scroll.scrollSensitivity=42f;
         RectTransform content=EndlessHuntSceneFactory.Rect("Inventory Content (All Objects Persistent)",viewport.transform,new Vector2(0f,1f),new Vector2(1f,1f),new Vector2(12f,-height),new Vector2(-12f,0f));
         content.pivot=new Vector2(.5f,1f); scroll.content=content; scroll.viewport=viewport.rectTransform;
@@ -204,7 +197,7 @@ internal static class EndlessHuntMenuSceneBuilder
         Image icon=EndlessHuntSceneFactory.Image("Icon",rect,weapon.icon,new Vector2(.12f,.12f),new Vector2(.88f,.82f),Vector2.zero,Vector2.zero,Color.white); icon.preserveAspect=true;
         Text level=EndlessHuntSceneFactory.Text("Level",rect,"LV.1",20,Color.white,TextAnchor.UpperCenter,new Vector2(.02f,.72f),new Vector2(.98f,.98f),Vector2.zero,Vector2.zero,FontStyle.Bold);
         Text price=EndlessHuntSceneFactory.Text("Price",rect,"",14,new Color(1f,.9f,.25f),TextAnchor.LowerCenter,new Vector2(.02f,.01f),new Vector2(.98f,.2f),Vector2.zero,Vector2.zero,FontStyle.Bold);
-        Image selected=EndlessHuntSceneFactory.Image("Equipped",rect,EndlessHuntSceneFactory.Ui("Effects/effect_yellow.png"),Vector2.zero,Vector2.one,new Vector2(-3f,-3f),new Vector2(3f,3f),Color.white); selected.enabled=false;
+        Image selected=EndlessHuntSceneFactory.Image("Equipped",rect,EndlessHuntSceneFactory.Ui("Icons/128px/tickV1_icon_128px.png"),new Vector2(.7f,0f),new Vector2(.98f,.28f),Vector2.zero,Vector2.zero,Color.white); selected.enabled=false;
         return new WeaponCardView{button=button,icon=icon,level=level,price=price,selectedFrame=selected};
     }
 
@@ -216,28 +209,35 @@ internal static class EndlessHuntMenuSceneBuilder
         Image icon=EndlessHuntSceneFactory.Image("Icon",rect,EndlessHuntSceneFactory.GearIcon(gear),new Vector2(.12f,.12f),new Vector2(.88f,.82f),Vector2.zero,Vector2.zero,Color.white); icon.preserveAspect=true;
         Text title=EndlessHuntSceneFactory.Text("Name",rect,gear.title,14,Color.white,TextAnchor.LowerCenter,new Vector2(.02f,.01f),new Vector2(.98f,.18f),Vector2.zero,Vector2.zero,FontStyle.Bold);
         Text status=EndlessHuntSceneFactory.Text("Level",rect,"LV.1",19,Color.white,TextAnchor.UpperCenter,new Vector2(.02f,.72f),new Vector2(.98f,.98f),Vector2.zero,Vector2.zero,FontStyle.Bold);
-        Image selected=EndlessHuntSceneFactory.Image("Equipped",rect,EndlessHuntSceneFactory.Ui("Effects/effect_yellow.png"),Vector2.zero,Vector2.one,new Vector2(-3f,-3f),new Vector2(3f,3f),Color.white); selected.enabled=false;
+        Image selected=EndlessHuntSceneFactory.Image("Equipped",rect,EndlessHuntSceneFactory.Ui("Icons/128px/tickV1_icon_128px.png"),new Vector2(.7f,0f),new Vector2(.98f,.28f),Vector2.zero,Vector2.zero,Color.white); selected.enabled=false;
         return new GearCardView{button=button,icon=icon,title=title,status=status,selectedFrame=selected};
     }
 
     private static RectTransform InventoryRect(RectTransform content,string name,int index)
     {
-        int col=index%5,row=index/5; float left=12f+col*204f,top=-12f-row*184f;
-        return EndlessHuntSceneFactory.Rect(name,content,new Vector2(0f,1f),new Vector2(0f,1f),new Vector2(left,top-168f),new Vector2(left+188f,top));
+        int col=index%5,row=index/5; float top=-12f-row*204f;
+        return EndlessHuntSceneFactory.Rect(name,content,new Vector2(col*.2f,1f),new Vector2((col+1)*.2f,1f),new Vector2(8f,top-188f),new Vector2(-8f,top));
     }
 
     private static GameObject BuildUpgrade(SurvivorMenu menu,Transform parent)
     {
         Image page=Page("Upgrade Screen",parent,Orange);
-        Header(page.transform,"KARAKTER GELİŞİMİ",new Vector2(.08f,.86f),new Vector2(.92f,.98f));
-        string[] names={"CAN","HASAR","HAREKET","TOPLAMA ALANI"}; menu.upgradeRows=new UpgradeRowView[4];
+        Header(page.transform,"KARAKTER GELİŞİMİ",new Vector2(.06f,.87f),new Vector2(.94f,.98f));
+        EndlessHuntSceneFactory.Text("Explanation",page.transform,"Kalıcı güç • Her avda seninle",26,Ink,TextAnchor.MiddleCenter,new Vector2(.05f,.8f),new Vector2(.95f,.87f),Vector2.zero,Vector2.zero,FontStyle.Bold);
+        EndlessHuntSceneFactory.Image("Talent Path",page.transform,null,new Vector2(.17f,.10f),new Vector2(.195f,.79f),Vector2.zero,Vector2.zero,new Color(.15f,.3f,.25f));
+        string[] names={"CAN","HASAR","HAREKET","TOPLAMA ALANI"};
+        string[] icons={"armor", "sword", "energy", "gem"};
+        menu.upgradeRows=new UpgradeRowView[4];
         for(int i=0;i<4;i++)
         {
-            float top=.81f-i*.18f; Image row=EndlessHuntSceneFactory.Image(names[i],page.transform,EndlessHuntSceneFactory.Ui("Cards/card_purple.png"),new Vector2(.06f,top-.15f),new Vector2(.94f,top),Vector2.zero,Vector2.zero,Color.white);
-            Text title=EndlessHuntSceneFactory.Text("Stat",row.transform,names[i],30,Color.white,TextAnchor.MiddleLeft,new Vector2(.06f,.43f),new Vector2(.58f,.9f),Vector2.zero,Vector2.zero,FontStyle.Bold);
-            Text level=EndlessHuntSceneFactory.Text("Level",row.transform,"LV.1",22,new Color(.8f,.9f,1f),TextAnchor.MiddleLeft,new Vector2(.06f,.08f),new Vector2(.58f,.5f),Vector2.zero,Vector2.zero,FontStyle.Bold);
-            Button button=EndlessHuntSceneFactory.Button("Upgrade",row.transform,EndlessHuntSceneFactory.Ui("Buttons/buttonAdvanced_yellow.png"),"",22,new Vector2(.6f,.18f),new Vector2(.95f,.82f),Vector2.zero,Vector2.zero);
-            Text cost=EndlessHuntSceneFactory.Text("Cost",button.transform,"150 ALTIN",21,Color.white,TextAnchor.MiddleCenter,Vector2.zero,Vector2.one,new Vector2(5f,4f),new Vector2(-5f,-4f),FontStyle.Bold);
+            float top=.78f-i*.18f;
+            Image row=EndlessHuntSceneFactory.Image(names[i],page.transform,EndlessHuntSceneFactory.Ui("Panels/panel_black.png"),new Vector2(.3f,top-.14f),new Vector2(.96f,top),Vector2.zero,Vector2.zero,Color.white);
+            Image node=EndlessHuntSceneFactory.Image("Talent Node",page.transform,EndlessHuntSceneFactory.Ui("Item Slots/itemSlotAdvanced_green.png"),new Vector2(.065f,top-.13f),new Vector2(.285f,top),Vector2.zero,Vector2.zero,Color.white);
+            EndlessHuntSceneFactory.Image("Icon",node.transform,EndlessHuntSceneFactory.Ui("Icons/128px/"+icons[i]+"_icon_128px.png"),new Vector2(.2f,.2f),new Vector2(.8f,.8f),Vector2.zero,Vector2.zero,Color.white).preserveAspect=true;
+            Text title=EndlessHuntSceneFactory.Text("Stat",row.transform,names[i],30,Color.white,TextAnchor.MiddleLeft,new Vector2(.06f,.48f),new Vector2(.96f,.93f),Vector2.zero,Vector2.zero,FontStyle.Bold);
+            Text level=EndlessHuntSceneFactory.Text("Level",row.transform,"LV.1",24,new Color(.8f,.9f,1f),TextAnchor.MiddleLeft,new Vector2(.06f,.07f),new Vector2(.47f,.5f),Vector2.zero,Vector2.zero,FontStyle.Bold);
+            Button button=EndlessHuntSceneFactory.Button("Upgrade",row.transform,EndlessHuntSceneFactory.Ui("Buttons/buttonAdvanced_yellow.png"),"",24,new Vector2(.49f,.07f),new Vector2(.95f,.49f),Vector2.zero,Vector2.zero);
+            Text cost=EndlessHuntSceneFactory.Text("Cost",button.transform,"150 ALTIN",24,Color.white,TextAnchor.MiddleCenter,Vector2.zero,Vector2.one,new Vector2(5f,4f),new Vector2(-5f,-4f),FontStyle.Bold);
             menu.upgradeRows[i]=new UpgradeRowView{title=title,level=level,cost=cost,button=button};
         }
         return page.gameObject;
@@ -246,7 +246,7 @@ internal static class EndlessHuntMenuSceneBuilder
     private static GameObject BuildStore(SurvivorMenu menu,Transform parent,GameObject startPrefab,WeaponDefinition[] weapons)
     {
         Image page=Page("Arsenal Store Screen",parent,Orange);
-        Header(page.transform,"SİLAH MAĞAZASI",new Vector2(.08f,.87f),new Vector2(.92f,.99f));
+        Header(page.transform,"SİLAH KOLEKSİYONU",new Vector2(.08f,.87f),new Vector2(.92f,.99f));
         Image detail=EndlessHuntSceneFactory.Image("Selected Weapon And Character",page.transform,EndlessHuntSceneFactory.Ui("Modals/modalSimple_v2.png"),new Vector2(.035f,.57f),new Vector2(.965f,.87f),Vector2.zero,Vector2.zero,Color.white);
         menu.storePreview=EndlessHuntSceneFactory.SpineGraphic(startPrefab,"Store Character Preview",detail.transform,new Vector2(.03f,.05f),new Vector2(.34f,.9f),Vector2.zero,Vector2.zero,1.75f);
         menu.weaponDetailIcon=EndlessHuntSceneFactory.Image("Weapon Icon",detail.transform,weapons[0].icon,new Vector2(.37f,.38f),new Vector2(.57f,.9f),Vector2.zero,Vector2.zero,Color.white); menu.weaponDetailIcon.preserveAspect=true;
@@ -256,7 +256,7 @@ internal static class EndlessHuntMenuSceneBuilder
         menu.weaponActionText=EndlessHuntSceneFactory.Text("Action",menu.weaponActionButton.transform,"KUŞAN",19,Color.white,TextAnchor.MiddleCenter,Vector2.zero,Vector2.one,new Vector2(5f,4f),new Vector2(-5f,-4f),FontStyle.Bold);
         menu.weaponUpgradeButton=EndlessHuntSceneFactory.Button("Upgrade Weapon",detail.transform,EndlessHuntSceneFactory.Ui("Buttons/buttonAdvanced_yellow.png"),"",20,new Vector2(.68f,.04f),new Vector2(.97f,.26f),Vector2.zero,Vector2.zero);
         menu.weaponUpgradeText=EndlessHuntSceneFactory.Text("Upgrade Cost",menu.weaponUpgradeButton.transform,"GELİŞTİR",18,Color.white,TextAnchor.MiddleCenter,Vector2.zero,Vector2.one,new Vector2(5f,4f),new Vector2(-5f,-4f),FontStyle.Bold);
-        RectTransform content=BuildInventoryScroll(page.transform,"Weapon Store Grid",new Vector2(0f,0f),new Vector2(1f,.56f),1750f);
+        RectTransform content=BuildInventoryScroll(page.transform,"Weapon Store Grid",new Vector2(0f,0f),new Vector2(1f,.56f),Mathf.Ceil(weapons.Length / 5f) * 204f + 24f);
         menu.weaponCards=new WeaponCardView[weapons.Length];
         for(int i=0;i<weapons.Length;i++) menu.weaponCards[i]=InventoryWeaponCard(content,weapons[i],i);
         content.GetComponentInParent<ScrollRect>().verticalNormalizedPosition=1f;
@@ -265,16 +265,19 @@ internal static class EndlessHuntMenuSceneBuilder
 
     private static void BuildNavigation(SurvivorMenu menu,Transform parent)
     {
-        Image nav=EndlessHuntSceneFactory.Image("Five Button Bottom Navigation",parent,
-            EndlessHuntSceneFactory.Ui("Containers/ButtonContainer.png"),Vector2.zero,new Vector2(1f,.108f),Vector2.zero,Vector2.zero,Color.white);
-        string[] labels={"MAĞAZA","EKİPMAN","SAVAŞ","GELİŞİM","SİLAHLAR"};
-        string[] sprites={"Buttons/shop_1ButtonDefault.png","Buttons/equipment_1ButtonDefault.png","Buttons/adventure_1ButtonDefault.png","Buttons/skills_1ButtonDefault.png","Buttons/store_1ButtonDefault.png"};
+        Image nav=EndlessHuntSceneFactory.Image("Bottom Navigation",parent,
+            EndlessHuntSceneFactory.Ui("Containers/ButtonContainer.png"),Vector2.zero,new Vector2(1f,0f),Vector2.zero,new Vector2(0f,150f),Color.white);
+        string[] labels={"KOLEKSİYON","EKİPMAN","SAVAŞ","GELİŞİM","SİLAHLAR"};
+        string[] icons={"shop","armor","adventure","skills","sword"};
         Button[] buttons=new Button[5]; menu.tabHighlights=new Image[5];
         for(int i=0;i<5;i++)
         {
-            float left=i*.2f; buttons[i]=EndlessHuntSceneFactory.Button(labels[i]+" Tab",nav.transform,EndlessHuntSceneFactory.Ui(sprites[i]),"",16,new Vector2(left,.02f),new Vector2(left+.2f,.98f),new Vector2(3f,2f),new Vector2(-3f,-2f));
-            menu.tabHighlights[i]=EndlessHuntSceneFactory.Image("Selected Orange Glow",buttons[i].transform,EndlessHuntSceneFactory.Ui("Effects/effect_yellow.png"),Vector2.zero,Vector2.one,new Vector2(-4f,-4f),new Vector2(4f,4f),new Color(1f,.65f,.12f,.85f));
-            EndlessHuntSceneFactory.Text("Tab Label",buttons[i].transform,labels[i],i==2?20:15,Color.white,TextAnchor.LowerCenter,new Vector2(0f,0f),new Vector2(1f,.32f),new Vector2(2f,0f),new Vector2(-2f,0f),FontStyle.Bold);
+            float left=i*.2f;
+            buttons[i]=EndlessHuntSceneFactory.Button(labels[i]+" Tab",nav.transform,EndlessHuntSceneFactory.Ui("Buttons/buttonSquare_black.png"),"",18,new Vector2(left,0f),new Vector2(left+.2f,1f),new Vector2(2f,2f),new Vector2(-2f,-2f));
+            menu.tabHighlights[i]=EndlessHuntSceneFactory.Image("Selected Gold Panel",buttons[i].transform,EndlessHuntSceneFactory.Ui("Buttons/buttonSquare_yellow.png"),Vector2.zero,Vector2.one,Vector2.zero,Vector2.zero,Color.white);
+            EndlessHuntSceneFactory.Image("Icon",buttons[i].transform,EndlessHuntSceneFactory.Ui("Icons/128px/"+icons[i]+"_icon_128px.png"),new Vector2(.24f,.31f),new Vector2(.76f,.95f),Vector2.zero,Vector2.zero,Color.white).preserveAspect=true;
+            EndlessHuntSceneFactory.Text("Tab Label",buttons[i].transform,labels[i],22,Color.white,TextAnchor.MiddleCenter,new Vector2(0f,0f),new Vector2(1f,.31f),new Vector2(2f,0f),new Vector2(-2f,0f),FontStyle.Bold);
+            menu.tabHighlights[i].enabled=i==2;
         }
         menu.storeTab=buttons[0]; menu.equipmentTab=buttons[1]; menu.homeTab=buttons[2]; menu.upgradeTab=buttons[3]; menu.arsenalTab=buttons[4];
     }
@@ -300,7 +303,7 @@ internal static class EndlessHuntMenuSceneBuilder
     }
 
     private static Image Page(string name,Transform parent,Color color) => EndlessHuntSceneFactory.Image(name,parent,
-        EndlessHuntSceneFactory.Ui("Panels/panel_yellow.png"),Vector2.zero,Vector2.one,Vector2.zero,Vector2.zero,color);
+        null,Vector2.zero,Vector2.one,Vector2.zero,Vector2.zero,color);
 
     private static void Header(Transform parent,string title,Vector2 min,Vector2 max)
     {

@@ -24,7 +24,7 @@ namespace EndlessHunt
 
     public static class GameCatalog
     {
-        public static readonly GearDefinition[] Gear =
+        private static readonly GearDefinition[] StarterGear =
         {
             new("top_start", "Kamp Tişörtü", GearSlot.Top, 0, "top/top_c_47", new Color(.22f,.78f,.95f)),
             new("top_scout", "İzci Ceketi", GearSlot.Top, 260, "top/top_c_16", new Color(.2f,.86f,.48f)),
@@ -40,6 +40,24 @@ namespace EndlessHunt
             new("boots_dash", "Atılma Botu", GearSlot.Boots, 300, "boots/boots_c_15", new Color(.95f,.4f,.28f))
         };
 
+        public static readonly GearDefinition[] Gear = BuildGear();
+        private static GearDefinition[] BuildGear()
+        {
+            var result = new System.Collections.Generic.List<GearDefinition>(StarterGear);
+            string[] categories = { "top", "bottom", "helmet", "hair_short", "boots" };
+            string[] labels = { "Üstlük", "Altlık", "Başlık", "Saç", "Bot" };
+            GearSlot[] slots = { GearSlot.Top, GearSlot.Bottom, GearSlot.Helmet, GearSlot.Hair, GearSlot.Boots };
+            int[] counts = { 60, 50, 60, 30, 30 };
+            for (int c = 0; c < categories.Length; c++)
+                for (int i = 1; i <= counts[c]; i++)
+                {
+                    string skin = categories[c] + "/" + categories[c] + "_c_" + i;
+                    if (result.Exists(g => g.spineSkin == skin)) continue;
+                    result.Add(new GearDefinition(categories[c] + "_" + i, labels[c] + " " + i.ToString("00"), slots[c], i * 15, skin, new Color(.3f,.65f,.85f)));
+                }
+            return result.ToArray();
+        }
+
         public static readonly string[] MapNames = { "Yeşil Kamp", "Kızıl Kanyon", "Gece Limanı", "Buz Diyarı", "Neon Çoraklık" };
         public static readonly Color[] MapGround =
         {
@@ -49,7 +67,7 @@ namespace EndlessHunt
 
     public static class GameProfile
     {
-        private const string Prefix = "EH3_";
+        private static string Prefix => LocalPlayerStore.WalletPrefix;
         public const int MaxEnergy = 20;
         public const int BattleEnergyCost = 5;
         public const string StartingWeaponId = "weapon_03";
@@ -60,20 +78,25 @@ namespace EndlessHunt
         public static int BestScore { get => PlayerPrefs.GetInt(Prefix + "Best", 0); set => SetInt("Best", Mathf.Max(value, BestScore)); }
         public static int SelectedStage { get => PlayerPrefs.GetInt(Prefix + "SelectedStage", 0); set => SetInt("SelectedStage", Mathf.Clamp(value, 0, GameCatalog.MapNames.Length - 1)); }
 
-        public static bool Owns(string id) => PlayerPrefs.GetInt(Prefix + "Own_" + id, DefaultOwned(id) ? 1 : 0) == 1;
+        // Preview release: every catalog item is available without spending currency.
+        public static bool UnlockAllEquipment => true;
+        public static bool Owns(string id) => UnlockAllEquipment || PlayerPrefs.GetInt(Prefix + "Own_" + id, DefaultOwned(id) ? 1 : 0) == 1;
         public static void Own(string id) { PlayerPrefs.SetInt(Prefix + "Own_" + id, 1); PlayerPrefs.Save(); }
         private static bool DefaultOwned(string id) => id == StartingWeaponId || id.EndsWith("_start") || id == "helmet_none";
 
         public static string Equipped(GearSlot slot)
         {
-            string fallback = slot switch
-            {
-                GearSlot.Top => "top_start", GearSlot.Bottom => "bottom_start", GearSlot.Helmet => "helmet_none",
-                GearSlot.Hair => "hair_start", _ => "boots_start"
-            };
-            return PlayerPrefs.GetString(Prefix + "Equip_" + slot, fallback);
+            return PlayerPrefs.GetString(Prefix + "BareEquip_" + slot, "");
         }
-        public static void Equip(GearDefinition gear) { PlayerPrefs.SetString(Prefix + "Equip_" + gear.slot, gear.id); PlayerPrefs.Save(); }
+        public static void Equip(GearDefinition gear) { PlayerPrefs.SetString(Prefix + "BareEquip_" + gear.slot, gear.id); PlayerPrefs.Save(); }
+        public static void Unequip(GearSlot slot) { PlayerPrefs.SetString(Prefix + "BareEquip_" + slot, ""); PlayerPrefs.Save(); }
+        public static float GearHealthBonus => GearBonus(GearSlot.Top, 20f) + GearBonus(GearSlot.Helmet, 10f) + GearBonus(GearSlot.Bottom, 10f);
+        public static float GearSpeedBonus => GearBonus(GearSlot.Boots, .12f);
+        private static float GearBonus(GearSlot slot, float value)
+        {
+            GearDefinition gear = FindEquipped(slot);
+            return gear == null || string.IsNullOrEmpty(gear.spineSkin) ? 0f : value * (1f + gear.price / 1000f);
+        }
         public static GearDefinition FindEquipped(GearSlot slot) => Array.Find(GameCatalog.Gear, x => x.id == Equipped(slot));
         public static bool Buy(GearDefinition gear)
         {
@@ -115,6 +138,7 @@ namespace EndlessHunt
             if (!PlayerPrefs.HasKey(Prefix + "EnergyTime")) PlayerPrefs.SetString(Prefix + "EnergyTime", DateTime.UtcNow.Ticks.ToString());
             PlayerPrefs.Save(); return true;
         }
+        public static void AddEnergy(int amount) { RefreshEnergy(); SetInt("Energy", Mathf.Min(9999, Energy + Mathf.Max(0,amount))); }
         public static string EnergyTimer()
         {
             RefreshEnergy(); if (Energy >= MaxEnergy) return "DOLU";

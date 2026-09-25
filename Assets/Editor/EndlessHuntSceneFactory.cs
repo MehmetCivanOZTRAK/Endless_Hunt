@@ -12,7 +12,7 @@ internal static class EndlessHuntSceneFactory
 
     private static Font _font;
     internal static Font Font => _font != null ? _font : _font =
-        AssetDatabase.LoadAssetAtPath<Font>("Assets/Carter_One/CarterOne-Regular.ttf") ??
+        AssetDatabase.LoadAssetAtPath<Font>("Assets/TextMesh Pro/Examples & Extras/Fonts/Roboto-Bold.ttf") ??
         Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
 
     internal static Sprite Sprite(string path)
@@ -27,7 +27,7 @@ internal static class EndlessHuntSceneFactory
     {
         if (!string.IsNullOrEmpty(gear.spineSkin))
         {
-            Sprite icon = Sprite(LayerThumbnails + gear.spineSkin + ".png");
+            Sprite icon = Sprite(LayerThumbnails + gear.spineSkin.Replace("hair_short/", "hair/") + ".png");
             if (icon != null) return icon;
         }
         return Ui("Icons/128px/armor_icon_128px.png");
@@ -58,7 +58,7 @@ internal static class EndlessHuntSceneFactory
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1080f, 1920f);
         scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-        scaler.matchWidthOrHeight = .55f;
+        scaler.matchWidthOrHeight = 0f;
         return canvas;
     }
 

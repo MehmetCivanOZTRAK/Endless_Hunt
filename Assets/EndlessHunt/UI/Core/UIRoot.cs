@@ -31,7 +31,7 @@ namespace EndlessHunt.UI
         private void Awake()
         {
             if (ensureEventSystem && EventSystem.current == null)
-                new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+                Debug.LogError("Assign an EventSystem in the UI scene before playing.", this);
         }
 
         public void Configure(UITheme uiTheme, SafeAreaController safeAreaController, Transform screens,

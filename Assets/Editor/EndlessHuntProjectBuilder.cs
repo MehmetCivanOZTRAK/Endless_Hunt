@@ -53,9 +53,7 @@ public static class EndlessHuntProjectBuilder
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        if (menuChanged)
-            EndlessHuntMainMenuBuilder.IntegrateMainMenuScene();
-        else if (gameChanged || gameTwoChanged)
+        if (menuChanged || gameChanged || gameTwoChanged)
             EditorSceneManager.OpenScene("Assets/Scenes/MainMenu.unity", OpenSceneMode.Single);
         Debug.Log(overwriteScenes
             ? "Endless Hunt explicit destructive gameplay-scene rebuild complete. UI Core prefab assets were preserved."

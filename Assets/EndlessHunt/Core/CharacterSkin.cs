@@ -34,10 +34,9 @@ namespace EndlessHunt
         private static void Apply(Skeleton skeleton, Spine.AnimationState animationState, WeaponDefinition[] weapons)
         {
             var combined = new Skin("endless-hunt-loadout");
-            Add(combined, skeleton, "skin/skin_1"); Add(combined, skeleton, "back/back_c_6");
+            Add(combined, skeleton, "skin/skin_1");
             Add(combined, skeleton, "eyes/eyes_c_6"); Add(combined, skeleton, "brow/brow_c_1");
-            Add(combined, skeleton, "mouth/mouth_c_1"); Add(combined, skeleton, "gloves/gloves_c_27");
-            Add(combined, skeleton, "eyewear/eyewear_c_27"); Add(combined, skeleton, "gear_left/gear_left_c_34");
+            Add(combined, skeleton, "mouth/mouth_c_1");
             Add(combined, skeleton, GameProfile.FindEquipped(GearSlot.Hair)?.spineSkin);
             Add(combined, skeleton, GameProfile.FindEquipped(GearSlot.Top)?.spineSkin);
             Add(combined, skeleton, GameProfile.FindEquipped(GearSlot.Bottom)?.spineSkin);

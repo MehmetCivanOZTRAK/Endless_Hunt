@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62c89424841c4a9a93c8245b5b9dfec2, type: 3}
+  m_Name: SurvivalBalance
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessHunt.SurvivalBalance
+  firstRewardCost: 12
+  rewardGrowth: 1.2
+  rewardLinearGrowth: 8
+  rewardQuadraticGrowth: 2
+  extraWeaponCost: 4
+  minimumRewardInterval: 10
+  waveSeconds: 35
+  initialPopulation: 18
+  populationPerWave: 9
+  maximumPopulation: 120
+  initialSpawnInterval: 1.3
+  minimumSpawnInterval: 0.5
+  bodyRadius: 0.56
+  spawnMargin: 2.5
+  playerSpeed: 3.8
+  enemySpeed: 1.55
+  maximumEnemySpeed: 3.25
+  contactDamage: 8
+  damageGrowth: 1.15
+  attackRange: 1.2
+  attackWindup: 0.35
+  attackCooldown: 1.05
+  firstRangedWave: 4
+  maximumRanged: 10
+  rangedCooldown: 6
+  rangedWindup: 0.8
+  projectileSpeed: 7
+  projectileDamageMultiplier: 2.5
+  rangedDistance: 7.5

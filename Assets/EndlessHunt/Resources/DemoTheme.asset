@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeec333590b1d384baad10d90976945f, type: 3}
+  m_Name: DemoTheme
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessHunt.UI.DemoTheme
+  font: {fileID: 11400000, guid: 97f8d1e8f1ea2274eae818877651d672, type: 2}
+  outlined: {fileID: 2100000, guid: 781f748558636304485e949a92916a18, type: 2}
+  ink: {fileID: 2100000, guid: 542a0f2843d1dfd4fbd6510d51ac2e22, type: 2}
+  creamModal: {fileID: -1953583963532133971, guid: 8e3e2ae85e1d15b49a48555d39598227,
+    type: 3}
+  darkModal: {fileID: 557562220977327174, guid: cc6ac8faf70a3a941b573cd9b1034acd,
+    type: 3}
+  notebook: {fileID: -1953583963532133971, guid: 8e3e2ae85e1d15b49a48555d39598227,
+    type: 3}
+  ribbon: {fileID: 1290800258283782149, guid: e8ecdb55fcf089d44acac53089c2e8b4, type: 3}
+  notebookHeader: {fileID: -125869785189644857, guid: b7d53f54e31def34a9aa8c15aa61b823,
+    type: 3}
+  darkHeader: {fileID: 9110294520004993777, guid: 9748c4b41955f8a458aaaebde03c3419,
+    type: 3}
+  cyanButton: {fileID: 5185293603272793163, guid: 171196cd17b76ed489595d27be35cc98,
+    type: 3}
+  pinkButton: {fileID: -7611012724460374136, guid: 837a9afa3c7476a4cbed6050f501ed7e,
+    type: 3}
+  greenButton: {fileID: 712923248015389449, guid: 996715958f65e724f9cdd5717ee75fc3,
+    type: 3}
+  darkButton: {fileID: 8104954996234863586, guid: 9fb9a61b395a80147968303e623e1eb9,
+    type: 3}
+  closeButton: {fileID: 3300897884327454459, guid: 4f731b6767385014ba12175a8bb6117b,
+    type: 3}
+  tabsDefault:
+  - {fileID: -5390324364028929065, guid: 920f77554ff31f945b0cd2ccd9606962, type: 3}
+  - {fileID: -4109355544006693671, guid: f9330bf7c822c8d46a8c52eb4b73f317, type: 3}
+  - {fileID: 4942696112988640570, guid: daf17b5eb617ba248a12a5e96f07352f, type: 3}
+  - {fileID: -7478037785990794064, guid: 3c1f9f2882ee21648b234daefac2f5c5, type: 3}
+  - {fileID: -4474472824968192712, guid: ef86c82446842724ca94a787e2aa70b1, type: 3}
+  tabsPressed:
+  - {fileID: -3027863508758685071, guid: 6945cca1a45436a48895c4e5c2426787, type: 3}
+  - {fileID: 1333082682657874104, guid: d13547484a1cbf04c889f0bcd95240ec, type: 3}
+  - {fileID: -6578025159410122408, guid: 73279ac004964fa4e9461b9aec7062e5, type: 3}
+  - {fileID: -1052757560439556946, guid: d94411554d92fa34896a9871526c22d2, type: 3}
+  - {fileID: 4189185732539008780, guid: 65447eddb777bec4e9791000be682ca5, type: 3}
+  slots:
+  - {fileID: 6381706882499427845, guid: a52a41487a6705740bfbbd84dfe11e66, type: 3}
+  - {fileID: -7845285239381616473, guid: 4edf78755eb868a419f04db25da88fe3, type: 3}
+  - {fileID: -5443800005478480944, guid: c419d37f30c038c428ecaaea82214169, type: 3}
+  selectedSlots:
+  - {fileID: 9077525640611850717, guid: 4161647990ec7864e90c82113b101f20, type: 3}
+  - {fileID: -1349213269109932424, guid: 041dac3a538cb504080d53277167ddf3, type: 3}
+  - {fileID: -7546109383198822500, guid: 8f0be8a96497cb044a19eb399b06325d, type: 3}
+  avatars:
+  - {fileID: 4823702883583363781, guid: fdd6cbbf0f0662b45b336575079a6907, type: 3}
+  - {fileID: -1051038800612421068, guid: b273bf18637084b4b873d89c81159bc7, type: 3}
+  - {fileID: 7423495719223947775, guid: 77ad7febae1233147aa7ebd16e98e5bb, type: 3}
+  - {fileID: 8787912453758866074, guid: ecd363cb439593b43aa06f220bf806a4, type: 3}
+  - {fileID: 997529942859433660, guid: 5841c82b0fa12924ca28a8cc0406a3c8, type: 3}
+  gem: {fileID: 3331523699058009595, guid: 09b1e8139fc38d9429bbc72f48f68742, type: 3}
+  coin: {fileID: -881601565654435340, guid: 07b230fef36cfb24fb708ff5183125d5, type: 3}
+  energy: {fileID: -4479459739063922185, guid: b02992ec527a3874b94e096563af717c, type: 3}
+  options: {fileID: 8178676256534848357, guid: 8241fd306d5661347a8d749c352feb37, type: 3}
+  settings: {fileID: 3626831137069022351, guid: 0ef6bc5e488d0ab438cdfcf52d9560a9,
+    type: 3}
+  mail: {fileID: -4195696773848805135, guid: e10e3c5853b283543bf0d809f71ebf99, type: 3}
+  skills: {fileID: 8787912453758866074, guid: ecd363cb439593b43aa06f220bf806a4, type: 3}
+  sword: {fileID: 997529942859433660, guid: 5841c82b0fa12924ca28a8cc0406a3c8, type: 3}
+  chest: {fileID: -5129478485568382899, guid: b5a46d4a8f119c24a8ce8732e1713907, type: 3}
+  tick: {fileID: -5790650380523923429, guid: dc6bbeee40ca5b1499178013cc501dff, type: 3}
+  lockIcon: {fileID: -125950584835574660, guid: 7a8718bc17786b74887b9f260b9aeda9,
+    type: 3}
+  barBase: {fileID: -3103757545050556897, guid: 73f51500894b6544c91ffae8ae45b0b1,
+    type: 3}
+  healthFill: {fileID: -5435520982606934613, guid: be1275756d1c28445b0e1820d53bcdcc,
+    type: 3}
+  levelFill: {fileID: -1788919318338149726, guid: 4661b6bb024b48945a54c6ee9d8844f3,
+    type: 3}
+  rewardFill: {fileID: -3781103434443220779, guid: 7c7cb068aa94bc1458f200d2861ebc65,
+    type: 3}
+  rewardCard: {fileID: 3578519614687630239, guid: abea30e52cda0e34a87885a9dcd5eb83,
+    type: 3}
+  rewardAvailable: {fileID: 6018923042050776411, guid: e7139cdbe756ced42afe177229bd5e5c,
+    type: 3}
+  rewardWide: {fileID: -330245079716506992, guid: a45232c18d3314f4787667448d1ff712,
+    type: 3}

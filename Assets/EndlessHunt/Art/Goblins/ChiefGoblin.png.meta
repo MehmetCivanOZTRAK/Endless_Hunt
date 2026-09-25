@@ -1,0 +1,1750 @@
+fileFormatVersion: 2
+guid: 4893a22dc93c4f846876ab1922c7187f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4263200572392619304
+    second: ChiefGoblin_0
+  - first:
+      213: 3820091046355008379
+    second: ChiefGoblin_1
+  - first:
+      213: 4207566157932307342
+    second: ChiefGoblin_2
+  - first:
+      213: -5953053414631755416
+    second: ChiefGoblin_3
+  - first:
+      213: -7211589860071197172
+    second: ChiefGoblin_4
+  - first:
+      213: -5574209035849038580
+    second: ChiefGoblin_5
+  - first:
+      213: 8548597748680591184
+    second: ChiefGoblin_6
+  - first:
+      213: 3567112543277232439
+    second: ChiefGoblin_7
+  - first:
+      213: 2839536458570413037
+    second: ChiefGoblin_8
+  - first:
+      213: 4670511827711792808
+    second: ChiefGoblin_9
+  - first:
+      213: -1582434150755918497
+    second: ChiefGoblin_10
+  - first:
+      213: 3898885494773165025
+    second: ChiefGoblin_11
+  - first:
+      213: -6403094191871728726
+    second: ChiefGoblin_12
+  - first:
+      213: -8837410974672391531
+    second: ChiefGoblin_13
+  - first:
+      213: 3480940450560885084
+    second: ChiefGoblin_14
+  - first:
+      213: -1453447798202483027
+    second: ChiefGoblin_15
+  - first:
+      213: -5286551647659767950
+    second: ChiefGoblin_16
+  - first:
+      213: 6177340345688474679
+    second: ChiefGoblin_17
+  - first:
+      213: 2410115042767525458
+    second: ChiefGoblin_18
+  - first:
+      213: -3386699967378316038
+    second: ChiefGoblin_19
+  - first:
+      213: 2764475088424871216
+    second: ChiefGoblin_20
+  - first:
+      213: -200839002765198663
+    second: ChiefGoblin_21
+  - first:
+      213: -6186871297369860546
+    second: ChiefGoblin_22
+  - first:
+      213: 5445734793970039069
+    second: ChiefGoblin_23
+  - first:
+      213: -5067188394063071414
+    second: ChiefGoblin_24
+  - first:
+      213: 4752837623472279566
+    second: ChiefGoblin_25
+  - first:
+      213: 3220260309385874777
+    second: ChiefGoblin_26
+  - first:
+      213: -2237279800672178468
+    second: ChiefGoblin_27
+  - first:
+      213: -8037938578950028333
+    second: ChiefGoblin_28
+  - first:
+      213: 3370004340751854803
+    second: ChiefGoblin_29
+  - first:
+      213: 6138494458313513874
+    second: ChiefGoblin_30
+  - first:
+      213: 2058093216992535157
+    second: ChiefGoblin_31
+  - first:
+      213: 1086707276860425320
+    second: ChiefGoblin_32
+  - first:
+      213: -988952548882692410
+    second: ChiefGoblin_33
+  - first:
+      213: 2033082409482136493
+    second: ChiefGoblin_34
+  - first:
+      213: -6426930016423302378
+    second: ChiefGoblin_35
+  - first:
+      213: 7622722214657441657
+    second: ChiefGoblin_36
+  - first:
+      213: -3885904862435823072
+    second: ChiefGoblin_37
+  - first:
+      213: 4720682366238444347
+    second: ChiefGoblin_38
+  - first:
+      213: -1776350522723690739
+    second: ChiefGoblin_39
+  - first:
+      213: 7589436211637227131
+    second: ChiefGoblin_40
+  - first:
+      213: 7944902234850442849
+    second: ChiefGoblin_41
+  - first:
+      213: -869708260142400672
+    second: ChiefGoblin_42
+  - first:
+      213: 2018282838635931168
+    second: ChiefGoblin_43
+  - first:
+      213: 4663895418244011489
+    second: ChiefGoblin_44
+  - first:
+      213: 7626508744966199392
+    second: ChiefGoblin_45
+  - first:
+      213: -436812250620631958
+    second: ChiefGoblin_46
+  - first:
+      213: 724062858745911933
+    second: ChiefGoblin_47
+  - first:
+      213: -7870590295268412741
+    second: ChiefGoblin_48
+  - first:
+      213: 2044423947831905632
+    second: ChiefGoblin_49
+  - first:
+      213: -4803285021792495169
+    second: ChiefGoblin_50
+  - first:
+      213: -99235928722310903
+    second: ChiefGoblin_51
+  - first:
+      213: 6352235494211985938
+    second: ChiefGoblin_52
+  - first:
+      213: 6053425922788623623
+    second: ChiefGoblin_53
+  - first:
+      213: 4096687448760582804
+    second: Running_Front_0
+  - first:
+      213: 6504350976915174592
+    second: Running_Front_1
+  - first:
+      213: 2608214740661240603
+    second: Running_Front_2
+  - first:
+      213: 7188561817246751657
+    second: Running_Front_3
+  - first:
+      213: -7506504313996488638
+    second: Running_Front_4
+  - first:
+      213: 1419858807949748683
+    second: Running_Front_5
+  - first:
+      213: 841202276517525173
+    second: Running_Back_0
+  - first:
+      213: 5343126618795276818
+    second: Running_Back_1
+  - first:
+      213: -6648220338377458045
+    second: Running_Back_2
+  - first:
+      213: 8979726952520963085
+    second: Running_Back_3
+  - first:
+      213: -4779736816937604384
+    second: Running_Back_4
+  - first:
+      213: -4067961793146032787
+    second: Running_Back_5
+  - first:
+      213: 2450011408175562809
+    second: Running_Left_0
+  - first:
+      213: -7379297548082869346
+    second: Running_Left_1
+  - first:
+      213: -6924269806754909683
+    second: Running_Left_2
+  - first:
+      213: 7243798107203720908
+    second: Running_Left_3
+  - first:
+      213: -5728495987834124511
+    second: Running_Left_4
+  - first:
+      213: -6580369270900386301
+    second: Running_Left_5
+  - first:
+      213: 2700859271491471321
+    second: Running_Right_0
+  - first:
+      213: -4369800158088844731
+    second: Running_Right_1
+  - first:
+      213: -8333238446816254900
+    second: Running_Right_2
+  - first:
+      213: 2679190235893944730
+    second: Running_Right_3
+  - first:
+      213: 5887020257209857793
+    second: Running_Right_4
+  - first:
+      213: -2210882556858189347
+    second: Running_Right_5
+  - first:
+      213: -3979548146777727648
+    second: Attacking_Front_0
+  - first:
+      213: 7773681437575440695
+    second: Attacking_Front_1
+  - first:
+      213: -5930019139630743216
+    second: Attacking_Front_2
+  - first:
+      213: 8065738032362407142
+    second: Attacking_Front_3
+  - first:
+      213: -782944180623980563
+    second: Attacking_Back_0
+  - first:
+      213: -7261877875412335001
+    second: Attacking_Back_1
+  - first:
+      213: 7561248196594917577
+    second: Attacking_Back_2
+  - first:
+      213: -4575630500712694740
+    second: Attacking_Back_3
+  - first:
+      213: -3360441735136178208
+    second: Attacking_Left_0
+  - first:
+      213: 7246930755666558317
+    second: Attacking_Left_1
+  - first:
+      213: -6404223958925786644
+    second: Attacking_Left_2
+  - first:
+      213: -684352390634753443
+    second: Attacking_Left_3
+  - first:
+      213: 7591784696486499644
+    second: Attacking_Right_0
+  - first:
+      213: -3726468488521875489
+    second: Attacking_Right_1
+  - first:
+      213: -4540658374043002777
+    second: Attacking_Right_2
+  - first:
+      213: 6420684030584154406
+    second: Attacking_Right_3
+  - first:
+      213: 6323618889308817343
+    second: Hurt_Front_0
+  - first:
+      213: -7153214790717468723
+    second: Hurt_Front_1
+  - first:
+      213: -3129728872066014810
+    second: Hurt_Back_0
+  - first:
+      213: 2129016470164963840
+    second: Hurt_Back_1
+  - first:
+      213: 6565917837678484229
+    second: Hurt_Left_0
+  - first:
+      213: 4637512583188846368
+    second: Hurt_Left_1
+  - first:
+      213: 6848876435966874663
+    second: Hurt_Right_0
+  - first:
+      213: -9189117434812548398
+    second: Hurt_Right_1
+  - first:
+      213: -8569863107390094752
+    second: Dying__0
+  - first:
+      213: -5751214071259050766
+    second: Dying__1
+  - first:
+      213: 2820488779480384736
+    second: Dying__2
+  - first:
+      213: -287617512194215370
+    second: Dying__3
+  - first:
+      213: 5487625587894416291
+    second: Dying__4
+  - first:
+      213: 4355052615338580174
+    second: Dying__5
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Running_Front_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4920d2b878b5ad830800000000000000
+      internalID: 4096687448760582804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Front_1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c47e7180c8144a50800000000000000
+      internalID: 6504350976915174592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Front_2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b130d0bdc7d323420800000000000000
+      internalID: 2608214740661240603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Front_3
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9abddead2e6e2c360800000000000000
+      internalID: 7188561817246751657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Front_4
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2405d4bf81a83d790800000000000000
+      internalID: -7506504313996488638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Front_5
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc9ed07201a54b310800000000000000
+      internalID: 1419858807949748683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Back_0
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b6b31c730d8cab00800000000000000
+      internalID: 841202276517525173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Back_1
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21af937c959962a40800000000000000
+      internalID: 5343126618795276818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Back_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 960
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38efb7673d6ccb3a0800000000000000
+      internalID: -6648220338377458045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Back_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 960
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d04530136166e9c70800000000000000
+      internalID: 8979726952520963085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Back_4
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 960
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0eae39a60b6faadb0800000000000000
+      internalID: -4779736816937604384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Back_5
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 960
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6d6ba75d42bb87c0800000000000000
+      internalID: -4067961793146032787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Left_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 960
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93085ff1560300220800000000000000
+      internalID: 2450011408175562809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Left_1
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 960
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9b0c9a2af7779990800000000000000
+      internalID: -7379297548082869346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Left_2
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 960
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d02396f0c4d08ef90800000000000000
+      internalID: -6924269806754909683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Left_3
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 960
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc6568ccff3278460800000000000000
+      internalID: 7243798107203720908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Left_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12785ebff3b4080b0800000000000000
+      internalID: -5728495987834124511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Left_5
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 306161d2305dda4a0800000000000000
+      internalID: -6580369270900386301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Right_0
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d7c19992316b7520800000000000000
+      internalID: 2700859271491471321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Right_1
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54a2bad88e95b53c0800000000000000
+      internalID: -4369800158088844731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Right_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c44a3e4b8c36a5c80800000000000000
+      internalID: -8333238446816254900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Right_3
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a91572813556e2520800000000000000
+      internalID: 2679190235893944730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Right_4
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 107b580bbb5e2b150800000000000000
+      internalID: 5887020257209857793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Running_Right_5
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd93c5e370e5151e0800000000000000
+      internalID: -2210882556858189347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Front_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06ddfb88b0ec5c8c0800000000000000
+      internalID: -3979548146777727648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Front_1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7396bbba41aa1eb60800000000000000
+      internalID: 7773681437575440695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Front_2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 051ca07d20754bda0800000000000000
+      internalID: -5930019139630743216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Front_3
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e4c15e91024fef60800000000000000
+      internalID: 8065738032362407142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Back_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de7c2fa7a6c6225f0800000000000000
+      internalID: -782944180623980563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Back_1
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76687c12c80a83b90800000000000000
+      internalID: -7261877875412335001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Back_2
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c06a907c23fee860800000000000000
+      internalID: 7561248196594917577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Back_3
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2cb3956d481080c0800000000000000
+      internalID: -4575630500712694740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Left_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ef8fc8db005d51d0800000000000000
+      internalID: -3360441735136178208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Left_1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6dbb5b5025429460800000000000000
+      internalID: 7246930755666558317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Left_2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce1ce2a8d30af17a0800000000000000
+      internalID: -6404223958925786644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Left_3
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d52b6076021b086f0800000000000000
+      internalID: -684352390634753443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Right_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c35135d55ff6b5960800000000000000
+      internalID: 7591784696486499644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Right_1
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdf77f247ace84cc0800000000000000
+      internalID: -3726468488521875489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Right_2
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76893c824475cf0c0800000000000000
+      internalID: -4540658374043002777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attacking_Right_3
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 629edf98b1ada1950800000000000000
+      internalID: 6420684030584154406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hurt_Front_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb7c33830e102c750800000000000000
+      internalID: 6323618889308817343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hurt_Front_1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcf07351c0daabc90800000000000000
+      internalID: -7153214790717468723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hurt_Back_0
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a1a8314c28f094d0800000000000000
+      internalID: -3129728872066014810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hurt_Back_1
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00283291339cb8d10800000000000000
+      internalID: 2129016470164963840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hurt_Left_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50b1a335c73de1b50800000000000000
+      internalID: 6565917837678484229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hurt_Left_1
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0271062bf11cb5040800000000000000
+      internalID: 4637512583188846368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hurt_Right_0
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7245954e4d81c0f50800000000000000
+      internalID: 6848876435966874663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hurt_Right_1
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2da36aa0162b97080800000000000000
+      internalID: -9189117434812548398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying__0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 062c94ea8eab11980800000000000000
+      internalID: -8569863107390094752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying__1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fc406ff5459f20b0800000000000000
+      internalID: -5751214071259050766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying__2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e447e1f993642720800000000000000
+      internalID: 2820488779480384736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying__3
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6327b72856d220cf0800000000000000
+      internalID: -287617512194215370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying__4
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a37ac2c566f72c40800000000000000
+      internalID: 5487625587894416291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dying__5
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec854639741407c30800000000000000
+      internalID: 4355052615338580174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Attacking_Back_0: -782944180623980563
+      Attacking_Back_1: -7261877875412335001
+      Attacking_Back_2: 7561248196594917577
+      Attacking_Back_3: -4575630500712694740
+      Attacking_Front_0: -3979548146777727648
+      Attacking_Front_1: 7773681437575440695
+      Attacking_Front_2: -5930019139630743216
+      Attacking_Front_3: 8065738032362407142
+      Attacking_Left_0: -3360441735136178208
+      Attacking_Left_1: 7246930755666558317
+      Attacking_Left_2: -6404223958925786644
+      Attacking_Left_3: -684352390634753443
+      Attacking_Right_0: 7591784696486499644
+      Attacking_Right_1: -3726468488521875489
+      Attacking_Right_2: -4540658374043002777
+      Attacking_Right_3: 6420684030584154406
+      ChiefGoblin_0: -4263200572392619304
+      ChiefGoblin_1: 3820091046355008379
+      ChiefGoblin_10: -1582434150755918497
+      ChiefGoblin_11: 3898885494773165025
+      ChiefGoblin_12: -6403094191871728726
+      ChiefGoblin_13: -8837410974672391531
+      ChiefGoblin_14: 3480940450560885084
+      ChiefGoblin_15: -1453447798202483027
+      ChiefGoblin_16: -5286551647659767950
+      ChiefGoblin_17: 6177340345688474679
+      ChiefGoblin_18: 2410115042767525458
+      ChiefGoblin_19: -3386699967378316038
+      ChiefGoblin_2: 4207566157932307342
+      ChiefGoblin_20: 2764475088424871216
+      ChiefGoblin_21: -200839002765198663
+      ChiefGoblin_22: -6186871297369860546
+      ChiefGoblin_23: 5445734793970039069
+      ChiefGoblin_24: -5067188394063071414
+      ChiefGoblin_25: 4752837623472279566
+      ChiefGoblin_26: 3220260309385874777
+      ChiefGoblin_27: -2237279800672178468
+      ChiefGoblin_28: -8037938578950028333
+      ChiefGoblin_29: 3370004340751854803
+      ChiefGoblin_3: -5953053414631755416
+      ChiefGoblin_30: 6138494458313513874
+      ChiefGoblin_31: 2058093216992535157
+      ChiefGoblin_32: 1086707276860425320
+      ChiefGoblin_33: -988952548882692410
+      ChiefGoblin_34: 2033082409482136493
+      ChiefGoblin_35: -6426930016423302378
+      ChiefGoblin_36: 7622722214657441657
+      ChiefGoblin_37: -3885904862435823072
+      ChiefGoblin_38: 4720682366238444347
+      ChiefGoblin_39: -1776350522723690739
+      ChiefGoblin_4: -7211589860071197172
+      ChiefGoblin_40: 7589436211637227131
+      ChiefGoblin_41: 7944902234850442849
+      ChiefGoblin_42: -869708260142400672
+      ChiefGoblin_43: 2018282838635931168
+      ChiefGoblin_44: 4663895418244011489
+      ChiefGoblin_45: 7626508744966199392
+      ChiefGoblin_46: -436812250620631958
+      ChiefGoblin_47: 724062858745911933
+      ChiefGoblin_48: -7870590295268412741
+      ChiefGoblin_49: 2044423947831905632
+      ChiefGoblin_5: -5574209035849038580
+      ChiefGoblin_50: -4803285021792495169
+      ChiefGoblin_51: -99235928722310903
+      ChiefGoblin_52: 6352235494211985938
+      ChiefGoblin_53: 6053425922788623623
+      ChiefGoblin_6: 8548597748680591184
+      ChiefGoblin_7: 3567112543277232439
+      ChiefGoblin_8: 2839536458570413037
+      ChiefGoblin_9: 4670511827711792808
+      Dying__0: -8569863107390094752
+      Dying__1: -5751214071259050766
+      Dying__2: 2820488779480384736
+      Dying__3: -287617512194215370
+      Dying__4: 5487625587894416291
+      Dying__5: 4355052615338580174
+      Hurt_Back_0: -3129728872066014810
+      Hurt_Back_1: 2129016470164963840
+      Hurt_Front_0: 6323618889308817343
+      Hurt_Front_1: -7153214790717468723
+      Hurt_Left_0: 6565917837678484229
+      Hurt_Left_1: 4637512583188846368
+      Hurt_Right_0: 6848876435966874663
+      Hurt_Right_1: -9189117434812548398
+      Running_Back_0: 841202276517525173
+      Running_Back_1: 5343126618795276818
+      Running_Back_2: -6648220338377458045
+      Running_Back_3: 8979726952520963085
+      Running_Back_4: -4779736816937604384
+      Running_Back_5: -4067961793146032787
+      Running_Front_0: 4096687448760582804
+      Running_Front_1: 6504350976915174592
+      Running_Front_2: 2608214740661240603
+      Running_Front_3: 7188561817246751657
+      Running_Front_4: -7506504313996488638
+      Running_Front_5: 1419858807949748683
+      Running_Left_0: 2450011408175562809
+      Running_Left_1: -7379297548082869346
+      Running_Left_2: -6924269806754909683
+      Running_Left_3: 7243798107203720908
+      Running_Left_4: -5728495987834124511
+      Running_Left_5: -6580369270900386301
+      Running_Right_0: 2700859271491471321
+      Running_Right_1: -4369800158088844731
+      Running_Right_2: -8333238446816254900
+      Running_Right_3: 2679190235893944730
+      Running_Right_4: 5887020257209857793
+      Running_Right_5: -2210882556858189347
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

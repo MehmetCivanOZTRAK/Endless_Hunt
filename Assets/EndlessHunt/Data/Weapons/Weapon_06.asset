@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b916557a0b0058a42893cad7714ab17d, type: 3}
+  m_Name: Weapon_06
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessHunt.WeaponDefinition
+  id: weapon_06
+  title: "Avc\u0131 Silah\u0131 06"
+  spineSkin: gear_right/gear_right_c_6
+  icon: {fileID: 21300000, guid: f2d6ae69a9c054955beadb915cb8678a, type: 3}
+  price: 300
+  baseDamage: 25.5
+  attackRange: 1.5400001
+  attackCooldown: 0.92
+  hitMoment: 0.3
+  attackAnimation: Attack3

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b916557a0b0058a42893cad7714ab17d, type: 3}
+  m_Name: Weapon_02
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessHunt.WeaponDefinition
+  id: weapon_02
+  title: "Ta\u015F Silah\u0131 02"
+  spineSkin: gear_right/gear_right_c_2
+  icon: {fileID: 21300000, guid: a3e9e6a53b5f24f37a0220e59475fa36, type: 3}
+  price: 160
+  baseDamage: 16.5
+  attackRange: 1.6300001
+  attackCooldown: 0.81
+  hitMoment: 0.3
+  attackAnimation: Attack2

@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890869ee2479d284dbfaa0793fe06d31, type: 3}
+  m_Name: EndlessHuntUITheme
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessHunt.UI.UITheme
+  primary: {r: 0.96, g: 0.49, b: 0.12, a: 1}
+  secondary: {r: 0.22, g: 0.48, b: 0.92, a: 1}
+  background: {r: 0.075, g: 0.085, b: 0.13, a: 1}
+  panel: {r: 0.14, g: 0.16, b: 0.23, a: 1}
+  accent: {r: 1, g: 0.82, b: 0.2, a: 1}
+  textPrimary: {r: 1, g: 1, b: 1, a: 1}
+  textSecondary: {r: 0.78, g: 0.84, b: 0.94, a: 1}
+  disabled: {r: 0.38, g: 0.4, b: 0.48, a: 1}
+  success: {r: 0.2, g: 0.82, b: 0.45, a: 1}
+  warning: {r: 1, g: 0.68, b: 0.15, a: 1}
+  danger: {r: 0.92, g: 0.22, b: 0.25, a: 1}
+  smallSpacing: 8
+  commonSpacing: 16
+  largeSpacing: 24
+  buttonHeight: 88
+  iconSize: 64
+  titleSize: 42
+  bodySize: 24
+  captionSize: 18
+  buttonNormal: {fileID: 8174954885997722986, guid: 5e8c4b8524f82a94e910f7517ed4d3a5,
+    type: 3}
+  buttonPressed: {fileID: -7858950472075756611, guid: ecca4df9783e97b4baaa7a5729109139,
+    type: 3}
+  buttonSelected: {fileID: 1564638514505014929, guid: 87a7234a7135a1e4ba9b7a49616f4f96,
+    type: 3}
+  buttonDisabled: {fileID: -8034192124640792748, guid: 27e2455425aedf044a3e1e76897762a4,
+    type: 3}
+  panelSprite: {fileID: -5373602693757907445, guid: 26c93cba2228c954ea76e31fca08ac2e,
+    type: 3}
+  modalSprite: {fileID: -877983339557650751, guid: 8ed3b67887bc7f64bbd2366b4748d223,
+    type: 3}
+  progressBackground: {fileID: -3103757545050556897, guid: 73f51500894b6544c91ffae8ae45b0b1,
+    type: 3}
+  progressFill: {fileID: -3781103434443220779, guid: 7c7cb068aa94bc1458f200d2861ebc65,
+    type: 3}
+  itemSlot: {fileID: 1512409514401340495, guid: 85fd4bce4acb9fe45bcdf1814b749625,
+    type: 3}
+  tabInactive: {fileID: -4474472824968192712, guid: ef86c82446842724ca94a787e2aa70b1,
+    type: 3}
+  tabActive: {fileID: 4189185732539008780, guid: 65447eddb777bec4e9791000be682ca5,
+    type: 3}
+  badgeSprite: {fileID: 1415121266536033475, guid: f4f0e9ae1c0c1c24db7f136b07041404,
+    type: 3}
+  toastSprite: {fileID: -4845638966495625061, guid: 1021a0203bc5eaa4daf1884564a37014,
+    type: 3}
